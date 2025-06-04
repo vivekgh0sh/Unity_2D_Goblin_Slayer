@@ -1,0 +1,71 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\vivekgh0sh\\Unity_2D_Goblin_Slayer\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{07507546-A899-BCAB-05F2-1038B679D430}|Assembly-CSharp.csproj|d:\\vivekgh0sh\\unity_2d_goblin_slayer\\assets\\scripts\\player\\arrow.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{07507546-A899-BCAB-05F2-1038B679D430}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\player\\arrow.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{07507546-A899-BCAB-05F2-1038B679D430}|Assembly-CSharp.csproj|d:\\vivekgh0sh\\unity_2d_goblin_slayer\\assets\\scripts\\player\\playerattackhitbox.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{07507546-A899-BCAB-05F2-1038B679D430}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\player\\playerattackhitbox.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{07507546-A899-BCAB-05F2-1038B679D430}|Assembly-CSharp.csproj|d:\\vivekgh0sh\\unity_2d_goblin_slayer\\assets\\scripts\\enemy\\skeleton\\skeleton.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{07507546-A899-BCAB-05F2-1038B679D430}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\enemy\\skeleton\\skeleton.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "arrow.cs",
+              "DocumentMoniker": "D:\\vivekgh0sh\\Unity_2D_Goblin_Slayer\\Assets\\Scripts\\Player\\arrow.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Player\\arrow.cs",
+              "ToolTip": "D:\\vivekgh0sh\\Unity_2D_Goblin_Slayer\\Assets\\Scripts\\Player\\arrow.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Player\\arrow.cs",
+              "ViewState": "AgIAADEAAAAAAAAAAAAAAFoAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-04T07:09:13.63Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "PlayerAttackHitbox.cs",
+              "DocumentMoniker": "D:\\vivekgh0sh\\Unity_2D_Goblin_Slayer\\Assets\\Scripts\\Player\\PlayerAttackHitbox.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\Player\\PlayerAttackHitbox.cs",
+              "ToolTip": "D:\\vivekgh0sh\\Unity_2D_Goblin_Slayer\\Assets\\Scripts\\Player\\PlayerAttackHitbox.cs",
+              "RelativeToolTip": "Assets\\Scripts\\Player\\PlayerAttackHitbox.cs",
+              "ViewState": "AgIAAEQAAAAAAAAAAAAAAG0AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-04T07:04:09.742Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Skeleton.cs",
+              "DocumentMoniker": "D:\\vivekgh0sh\\Unity_2D_Goblin_Slayer\\Assets\\Scripts\\enemy\\skeleton\\Skeleton.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\enemy\\skeleton\\Skeleton.cs",
+              "ToolTip": "D:\\vivekgh0sh\\Unity_2D_Goblin_Slayer\\Assets\\Scripts\\enemy\\skeleton\\Skeleton.cs",
+              "RelativeToolTip": "Assets\\Scripts\\enemy\\skeleton\\Skeleton.cs",
+              "ViewState": "AgIAAGYAAAAAAAAAAAA0wLwBAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-04T06:33:34.719Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

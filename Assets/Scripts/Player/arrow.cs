@@ -1,3 +1,4 @@
+// Arrow.cs
 using UnityEngine;
 
 public class Arrow : MonoBehaviour
@@ -16,9 +17,9 @@ public class Arrow : MonoBehaviour
             enabled = false; // Disable script if no Rigidbody
             return;
         }
-        rb.linearVelocity = direction * speed; // Using velocity is generally preferred over linearVelocity for direct setting
+        rb.linearVelocity = direction * speed; // Changed from linearVelocity to velocity
         Destroy(gameObject, lifetime);
-        // Debug.Log($"Arrow fired. Direction: {direction}, Speed: {speed}, Damage: {damage}"); // For testing
+        // Debug.Log($"Arrow fired. Direction: {direction}, Speed: {speed}, Damage: {damage}");
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -28,27 +29,38 @@ public class Arrow : MonoBehaviour
 
         bool enemyHit = false;
 
-        // --- START OF MODIFIED SECTION ---
-        // First, try to get the 'ganja' component (assuming class name is 'ganja')
-        ganja ganjaEnemy = other.GetComponent<ganja>(); // IMPORTANT: Class name 'ganja' all lowercase
-        if (ganjaEnemy != null)
+        // --- START OF CORRECTED SECTION ---
+        // 1. Try to get the SkeletonKnight component FIRST
+        SkeletonKnight skeletonKnightEnemy = other.GetComponent<SkeletonKnight>();
+        if (skeletonKnightEnemy != null)
         {
-            Debug.Log($"'ganja' component found on '{other.gameObject.name}' by arrow. Applying {damage} damage.");
-            ganjaEnemy.TakeDamage(damage); // Assuming ganja.cs has TakeDamage(int)
+            Debug.Log($"'SkeletonKnight' component found on '{other.gameObject.name}' by arrow. Applying {damage} damage.");
+            skeletonKnightEnemy.TakeDamage(damage); // Assuming SkeletonKnight.cs has TakeDamage(int)
             enemyHit = true;
         }
         else
         {
-            // If not 'ganja', try to get the generic 'Enemy' component (for your older enemies)
-            Enemy genericEnemy = other.GetComponent<Enemy>();
-            if (genericEnemy != null)
+            // 2. If not SkeletonKnight, try to get the 'ganja' component
+            ganja ganjaEnemy = other.GetComponent<ganja>();
+            if (ganjaEnemy != null)
             {
-                Debug.Log($"Generic 'Enemy' component found on '{other.gameObject.name}' by arrow. Applying {damage} damage.");
-                genericEnemy.TakeDamage(damage); // Assuming Enemy.cs has TakeDamage(int)
+                Debug.Log($"'ganja' component found on '{other.gameObject.name}' by arrow. Applying {damage} damage.");
+                ganjaEnemy.TakeDamage(damage); // Assuming ganja.cs has TakeDamage(int)
                 enemyHit = true;
             }
+            else
+            {
+                // 3. If not 'ganja', try to get the generic 'Enemy' component
+                Enemy genericEnemy = other.GetComponent<Enemy>();
+                if (genericEnemy != null)
+                {
+                    Debug.Log($"Generic 'Enemy' component found on '{other.gameObject.name}' by arrow. Applying {damage} damage.");
+                    genericEnemy.TakeDamage(damage); // Assuming Enemy.cs has TakeDamage(int)
+                    enemyHit = true;
+                }
+            }
         }
-        // --- END OF MODIFIED SECTION ---
+        // --- END OF CORRECTED SECTION ---
 
         if (enemyHit)
         {
@@ -58,26 +70,22 @@ public class Arrow : MonoBehaviour
         }
 
         // If it's not an enemy, decide if it should be destroyed
-        // (e.g., on hitting a wall or anything that's not the player or another arrow)
-        // This logic helps prevent the arrow from being destroyed if it briefly touches the player who fired it at spawn.
         bool isPlayer = other.CompareTag("Player") || other.GetComponent<Player>() != null;
         bool isAnotherArrow = other.GetComponent<Arrow>() != null;
 
         if (!isPlayer && !isAnotherArrow)
         {
-            // You might want to add more specific checks here, e.g., only destroy on objects with a "Wall" tag or on a specific "Environment" layer.
-            // For now, it destroys on anything that's not the player or another arrow.
+            // This log was the one you were seeing:
             Debug.Log($"Arrow hit non-enemy, non-player, non-arrow object: '{other.gameObject.name}'. Destroying arrow.");
             Destroy(gameObject);
         }
         else if (isPlayer)
         {
-            Debug.Log($"Arrow collided with Player: {other.gameObject.name}. Arrow not destroyed (to prevent self-destruction at spawn).");
+            // Debug.Log($"Arrow collided with Player: {other.gameObject.name}. Arrow not destroyed (to prevent self-destruction at spawn).");
         }
         else if (isAnotherArrow)
         {
-            Debug.Log($"Arrow collided with another Arrow: {other.gameObject.name}. Arrow not destroyed (arrows pass through each other).");
-            // If you want arrows to destroy each other, you'd add Destroy(gameObject) here.
+            // Debug.Log($"Arrow collided with another Arrow: {other.gameObject.name}. Arrow not destroyed (arrows pass through each other).");
         }
     }
 }
