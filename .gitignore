@@ -7,9 +7,11 @@
 [Bb]uild/
 [Bb]uilds/
 [Ll]ogs/
+Logs
 MemoryCaptures/
 UserSettings/
-
+Assembly-CSharp.csproj
+Assembly-CSharp-Editor.csproj
 # === Crash Reports ===
 sysinfo.txt
 
