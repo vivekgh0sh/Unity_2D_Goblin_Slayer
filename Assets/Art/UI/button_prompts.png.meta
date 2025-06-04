@@ -1,0 +1,2210 @@
+fileFormatVersion: 2
+guid: 0e3936fb91fc9e54f8ecbed3539ee56a
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -7334622465905328415
+    second: button_prompts_TAB
+  - first:
+      213: 4181717644597148883
+    second: button_prompts_1
+  - first:
+      213: 6706395345956290073
+    second: button_prompts_2
+  - first:
+      213: -5426778892417896171
+    second: button_prompts_3
+  - first:
+      213: 8930481642757489075
+    second: button_prompts_4
+  - first:
+      213: 2165865153844496687
+    second: button_prompts_5
+  - first:
+      213: -1875181574505611031
+    second: button_prompts_6
+  - first:
+      213: -2516767576312970959
+    second: button_prompts_7
+  - first:
+      213: -7347171335548313680
+    second: button_prompts_8
+  - first:
+      213: -4139531979748659697
+    second: button_prompts_9
+  - first:
+      213: -5354392173053672938
+    second: button_prompts_0
+  - first:
+      213: 6262501668073668671
+    second: button_prompts_DPAD
+  - first:
+      213: -6109485447906953311
+    second: button_prompts_DPAD_UP
+  - first:
+      213: -1531983565858568941
+    second: button_prompts_DPAD_DOWN
+  - first:
+      213: 3086786960159825062
+    second: button_prompts_CAPS
+  - first:
+      213: -9181449798894843059
+    second: button_prompts_Q
+  - first:
+      213: -5956428367733637112
+    second: button_prompts_W
+  - first:
+      213: 9153441256760567870
+    second: button_prompts_E
+  - first:
+      213: -8137608295298008272
+    second: button_prompts_R
+  - first:
+      213: -7906194721317990197
+    second: button_prompts_T
+  - first:
+      213: 6106019204803622704
+    second: button_prompts_Y
+  - first:
+      213: -5989202030272016813
+    second: button_prompts_U
+  - first:
+      213: -5539223773525155474
+    second: button_prompts_I
+  - first:
+      213: -9099711028624896561
+    second: button_prompts_O
+  - first:
+      213: -6003635672619965717
+    second: button_prompts_P
+  - first:
+      213: 3517920998650258390
+    second: button_prompts_DPAD_LEFT
+  - first:
+      213: -3153556074358229229
+    second: button_prompts_SHIFT
+  - first:
+      213: 7265759573114270122
+    second: button_prompts_A
+  - first:
+      213: -1611562419950334635
+    second: button_prompts_S
+  - first:
+      213: 7878269527211224507
+    second: button_prompts_D
+  - first:
+      213: -2766186027392207137
+    second: button_prompts_F
+  - first:
+      213: -4466120388792100479
+    second: button_prompts_G
+  - first:
+      213: 8176203010903772454
+    second: button_prompts_H
+  - first:
+      213: 6614284451114624917
+    second: button_prompts_J
+  - first:
+      213: -7017106344253171041
+    second: button_prompts_K
+  - first:
+      213: -8377239412011246348
+    second: button_prompts_L
+  - first:
+      213: -5732291367490856506
+    second: button_prompts_ARROW_UP
+  - first:
+      213: -239909066489476136
+    second: button_prompts_DPAD_RIGHT
+  - first:
+      213: 3866765757066156769
+    second: button_prompts_CTRL
+  - first:
+      213: -4394737279280396872
+    second: button_prompts_WIN
+  - first:
+      213: 7168066387052454438
+    second: button_prompts_ALT
+  - first:
+      213: -4032917008266610806
+    second: button_prompts_Z
+  - first:
+      213: -234378704618114291
+    second: button_prompts_X
+  - first:
+      213: 1902833016486946233
+    second: button_prompts_C
+  - first:
+      213: 7273311473878053613
+    second: button_prompts_SPACE
+  - first:
+      213: 6304094981646196498
+    second: button_prompts_V
+  - first:
+      213: 7964998389644731013
+    second: button_prompts_B
+  - first:
+      213: 6960042528499713434
+    second: button_prompts_N
+  - first:
+      213: -6892892591406537881
+    second: button_prompts_M
+  - first:
+      213: 5590209682216471564
+    second: button_prompts_ARROW_LEFT
+  - first:
+      213: 8059298323529068247
+    second: button_prompts_ARROW_DOWN
+  - first:
+      213: -7707356380524541288
+    second: button_prompts_ARROW_RIGHT
+  - first:
+      213: 9007018128798885367
+    second: button_prompts_XBOX_X
+  - first:
+      213: -8363857770545714868
+    second: button_prompts_XBOX_Y
+  - first:
+      213: -6784652166764616607
+    second: button_prompts_XBOX_A
+  - first:
+      213: 3782517402365116253
+    second: button_prompts_XBOX_B
+  - first:
+      213: -7830857359264652674
+    second: button_prompts_LEFT_TRIGGER
+  - first:
+      213: -4874875217524570250
+    second: button_prompts_RIGHT_TRIGGER
+  - first:
+      213: 4542756090056223932
+    second: button_prompts_LEFT_BUMPER
+  - first:
+      213: -513576016792411538
+    second: button_prompts_RIGHT_BUMPER
+  - first:
+      213: 5094021259003808943
+    second: button_prompts_BLANK
+  - first:
+      213: -1873898155827764098
+    second: button_prompts_RIGHT_MOUSE
+  - first:
+      213: 4811245723132420760
+    second: button_prompts_LEFT_MOUSE
+  - first:
+      213: -8784216774483739404
+    second: button_prompts_PS_SQUARE
+  - first:
+      213: 7360116524734552861
+    second: button_prompts_PS_CIRCLE
+  - first:
+      213: 4516531028223173959
+    second: button_prompts_PS_CROSS
+  - first:
+      213: -6404122015194361356
+    second: button_prompts_PS_TRIANGLE
+  - first:
+      213: 227556154715677312
+    second: button_prompts_L1
+  - first:
+      213: -701546120264184788
+    second: button_prompts_R1
+  - first:
+      213: 6116088247015670661
+    second: button_prompts_L2
+  - first:
+      213: -2195627464031327683
+    second: button_prompts_R2
+  - first:
+      213: -539081722678238203
+    second: button_prompts_LEFT_MOUSE_Click
+  - first:
+      213: 2568835563209836189
+    second: button_prompts_RIGHT_MOUSE_Click
+  - first:
+      213: 5851675539878805286
+    second: button_prompts_BLOCK
+  - first:
+      213: -4263016762153786782
+    second: button_prompts_ATTACK
+  - first:
+      213: 4727776755155566945
+    second: button_prompts_ATTACK_RANGED
+  - first:
+      213: -7132682663860277065
+    second: button_prompts_SLIDE
+  - first:
+      213: 2682847641656702145
+    second: button_prompts_ENTER
+  - first:
+      213: -5723163318783347120
+    second: button_prompts_SELECT
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 1
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WindowsStoreApps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: button_prompts_TAB
+      rect:
+        serializedVersion: 2
+        x: 38
+        y: 56
+        width: 20
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1eefc1e4abf263a90800000000000000
+      internalID: -7334622465905328415
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_1
+      rect:
+        serializedVersion: 2
+        x: 59
+        y: 56
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3dc3235ca02780a30800000000000000
+      internalID: 4181717644597148883
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_2
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 56
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 91ebe0ff807e11d50800000000000000
+      internalID: 6706395345956290073
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_3
+      rect:
+        serializedVersion: 2
+        x: 85
+        y: 56
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 511f7d2895530b4b0800000000000000
+      internalID: -5426778892417896171
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_4
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 56
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3b105b50db17feb70800000000000000
+      internalID: 8930481642757489075
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_5
+      rect:
+        serializedVersion: 2
+        x: 111
+        y: 56
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f294c46d1e2be0e10800000000000000
+      internalID: 2165865153844496687
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_6
+      rect:
+        serializedVersion: 2
+        x: 124
+        y: 56
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9e04c3a0b440af5e0800000000000000
+      internalID: -1875181574505611031
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_7
+      rect:
+        serializedVersion: 2
+        x: 137
+        y: 56
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 13105a74935a21dd0800000000000000
+      internalID: -2516767576312970959
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_8
+      rect:
+        serializedVersion: 2
+        x: 150
+        y: 56
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0bfd5b8e89a990a90800000000000000
+      internalID: -7347171335548313680
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_9
+      rect:
+        serializedVersion: 2
+        x: 163
+        y: 56
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f0e26bab89d6d86c0800000000000000
+      internalID: -4139531979748659697
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_0
+      rect:
+        serializedVersion: 2
+        x: 176
+        y: 56
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6120109ffa061b5b0800000000000000
+      internalID: -5354392173053672938
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_DPAD
+      rect:
+        serializedVersion: 2
+        x: 198
+        y: 43
+        width: 27
+        height: 27
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f3082d24610e8e650800000000000000
+      internalID: 6262501668073668671
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_DPAD_UP
+      rect:
+        serializedVersion: 2
+        x: 228
+        y: 56
+        width: 7
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1a77615ca5fb63ba0800000000000000
+      internalID: -6109485447906953311
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_DPAD_DOWN
+      rect:
+        serializedVersion: 2
+        x: 236
+        y: 56
+        width: 7
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 315834b401d4dbae0800000000000000
+      internalID: -1531983565858568941
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_CAPS
+      rect:
+        serializedVersion: 2
+        x: 31
+        y: 43
+        width: 27
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6ac52a1c26876da20800000000000000
+      internalID: 3086786960159825062
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_Q
+      rect:
+        serializedVersion: 2
+        x: 59
+        y: 43
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d4b8ac5ad00f49080800000000000000
+      internalID: -9181449798894843059
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_W
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 43
+        width: 13
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8004d2345f3865da0800000000000000
+      internalID: -5956428367733637112
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_E
+      rect:
+        serializedVersion: 2
+        x: 86
+        y: 43
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e386e95735e870f70800000000000000
+      internalID: 9153441256760567870
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_R
+      rect:
+        serializedVersion: 2
+        x: 99
+        y: 43
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 03b7d7dce58611f80800000000000000
+      internalID: -8137608295298008272
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_T
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 43
+        width: 13
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bc0d5ce2acd874290800000000000000
+      internalID: -7906194721317990197
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_Y
+      rect:
+        serializedVersion: 2
+        x: 126
+        y: 43
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 037780e9d10fcb450800000000000000
+      internalID: 6106019204803622704
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_U
+      rect:
+        serializedVersion: 2
+        x: 139
+        y: 43
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 35e86915c7412eca0800000000000000
+      internalID: -5989202030272016813
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_I
+      rect:
+        serializedVersion: 2
+        x: 152
+        y: 43
+        width: 11
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e6162a77359b023b0800000000000000
+      internalID: -5539223773525155474
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_O
+      rect:
+        serializedVersion: 2
+        x: 164
+        y: 43
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fcdcb14280557b180800000000000000
+      internalID: -9099711028624896561
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_P
+      rect:
+        serializedVersion: 2
+        x: 177
+        y: 43
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: be2af941a2dceaca0800000000000000
+      internalID: -6003635672619965717
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_DPAD_LEFT
+      rect:
+        serializedVersion: 2
+        x: 227
+        y: 48
+        width: 13
+        height: 7
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6d3af60728a22d030800000000000000
+      internalID: 3517920998650258390
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_SHIFT
+      rect:
+        serializedVersion: 2
+        x: 44
+        y: 30
+        width: 20
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3173a9865715c34d0800000000000000
+      internalID: -3153556074358229229
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_A
+      rect:
+        serializedVersion: 2
+        x: 65
+        y: 30
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aa1beda06d925d460800000000000000
+      internalID: 7265759573114270122
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_S
+      rect:
+        serializedVersion: 2
+        x: 78
+        y: 30
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 55dcd79748492a9e0800000000000000
+      internalID: -1611562419950334635
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_D
+      rect:
+        serializedVersion: 2
+        x: 91
+        y: 30
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bbda536e46c355d60800000000000000
+      internalID: 7878269527211224507
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_F
+      rect:
+        serializedVersion: 2
+        x: 104
+        y: 30
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fd673a6c6788c99d0800000000000000
+      internalID: -2766186027392207137
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_G
+      rect:
+        serializedVersion: 2
+        x: 117
+        y: 30
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 189daed3b272502c0800000000000000
+      internalID: -4466120388792100479
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_H
+      rect:
+        serializedVersion: 2
+        x: 130
+        y: 30
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 62d066ca155b77170800000000000000
+      internalID: 8176203010903772454
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_J
+      rect:
+        serializedVersion: 2
+        x: 143
+        y: 30
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 597a3101aa8aacb50800000000000000
+      internalID: 6614284451114624917
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_K
+      rect:
+        serializedVersion: 2
+        x: 156
+        y: 30
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f9a56a745fa3e9e90800000000000000
+      internalID: -7017106344253171041
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_L
+      rect:
+        serializedVersion: 2
+        x: 169
+        y: 30
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4fcdaa8a3211ebb80800000000000000
+      internalID: -8377239412011246348
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_ARROW_UP
+      rect:
+        serializedVersion: 2
+        x: 195
+        y: 30
+        width: 11
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6c95bab4f5fc270b0800000000000000
+      internalID: -5732291367490856506
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_DPAD_RIGHT
+      rect:
+        serializedVersion: 2
+        x: 227
+        y: 40
+        width: 13
+        height: 7
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8dbcf71a9fbabacf0800000000000000
+      internalID: -239909066489476136
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_CTRL
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 17
+        width: 28
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1ea929318f289a530800000000000000
+      internalID: 3866765757066156769
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_WIN
+      rect:
+        serializedVersion: 2
+        x: 30
+        y: 17
+        width: 13
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8b543539ab1c203c0800000000000000
+      internalID: -4394737279280396872
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_ALT
+      rect:
+        serializedVersion: 2
+        x: 44
+        y: 17
+        width: 22
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 622eda6a6661a7360800000000000000
+      internalID: 7168066387052454438
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_Z
+      rect:
+        serializedVersion: 2
+        x: 67
+        y: 17
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a8733a929533808c0800000000000000
+      internalID: -4032917008266610806
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_X
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 17
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d0332585fc15fbcf0800000000000000
+      internalID: -234378704618114291
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_C
+      rect:
+        serializedVersion: 2
+        x: 93
+        y: 17
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9b5e69efb88386a10800000000000000
+      internalID: 1902833016486946233
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_SPACE
+      rect:
+        serializedVersion: 2
+        x: 106
+        y: 17
+        width: 22
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: de23645ff3effe460800000000000000
+      internalID: 7273311473878053613
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_V
+      rect:
+        serializedVersion: 2
+        x: 129
+        y: 17
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 21f185b3cf4ac7750800000000000000
+      internalID: 6304094981646196498
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_B
+      rect:
+        serializedVersion: 2
+        x: 142
+        y: 17
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5822553c5db598e60800000000000000
+      internalID: 7964998389644731013
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_N
+      rect:
+        serializedVersion: 2
+        x: 155
+        y: 17
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a9546d4cdc9079060800000000000000
+      internalID: 6960042528499713434
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_M
+      rect:
+        serializedVersion: 2
+        x: 168
+        y: 17
+        width: 13
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 763aa4e45b68750a0800000000000000
+      internalID: -6892892591406537881
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_ARROW_LEFT
+      rect:
+        serializedVersion: 2
+        x: 182
+        y: 17
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c0c4678761a649d40800000000000000
+      internalID: 5590209682216471564
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_ARROW_DOWN
+      rect:
+        serializedVersion: 2
+        x: 195
+        y: 17
+        width: 11
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7dee9d0102168df60800000000000000
+      internalID: 8059298323529068247
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_ARROW_RIGHT
+      rect:
+        serializedVersion: 2
+        x: 207
+        y: 17
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 89a8e7d0538f90590800000000000000
+      internalID: -7707356380524541288
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_XBOX_X
+      rect:
+        serializedVersion: 2
+        x: 31
+        y: 1
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7f5af84544b5ffc70800000000000000
+      internalID: 9007018128798885367
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_XBOX_Y
+      rect:
+        serializedVersion: 2
+        x: 44
+        y: 1
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c496bbadbab9deb80800000000000000
+      internalID: -8363857770545714868
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_XBOX_A
+      rect:
+        serializedVersion: 2
+        x: 57
+        y: 1
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 164296b0dc218d1a0800000000000000
+      internalID: -6784652166764616607
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_XBOX_B
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 1
+        width: 11
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d5fb4bc69833e7430800000000000000
+      internalID: 3782517402365116253
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_LEFT_TRIGGER
+      rect:
+        serializedVersion: 2
+        x: 82
+        y: 1
+        width: 16
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e72e64ea8b4335390800000000000000
+      internalID: -7830857359264652674
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_RIGHT_TRIGGER
+      rect:
+        serializedVersion: 2
+        x: 99
+        y: 1
+        width: 17
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 677c71f51d6f85cb0800000000000000
+      internalID: -4874875217524570250
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_LEFT_BUMPER
+      rect:
+        serializedVersion: 2
+        x: 117
+        y: 1
+        width: 16
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cbc2b09689c1b0f30800000000000000
+      internalID: 4542756090056223932
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_RIGHT_BUMPER
+      rect:
+        serializedVersion: 2
+        x: 134
+        y: 1
+        width: 17
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e62ade175596fd8f0800000000000000
+      internalID: -513576016792411538
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_BLANK
+      rect:
+        serializedVersion: 2
+        x: 157
+        y: 2
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: facc535885991b640800000000000000
+      internalID: 5094021259003808943
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_RIGHT_MOUSE
+      rect:
+        serializedVersion: 2
+        x: 175
+        y: 2
+        width: 9
+        height: 14
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e7460ac3e839ef5e0800000000000000
+      internalID: -1873898155827764098
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_LEFT_MOUSE
+      rect:
+        serializedVersion: 2
+        x: 185
+        y: 2
+        width: 9
+        height: 14
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 892ec6e7e7af4c240800000000000000
+      internalID: 4811245723132420760
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_PS_SQUARE
+      rect:
+        serializedVersion: 2
+        x: 196
+        y: 2
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4fc7ed66261381680800000000000000
+      internalID: -8784216774483739404
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_PS_CIRCLE
+      rect:
+        serializedVersion: 2
+        x: 209
+        y: 2
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d1b1942dbf2642660800000000000000
+      internalID: 7360116524734552861
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_PS_CROSS
+      rect:
+        serializedVersion: 2
+        x: 222
+        y: 2
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 745a5426a01fdae30800000000000000
+      internalID: 4516531028223173959
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_PS_TRIANGLE
+      rect:
+        serializedVersion: 2
+        x: 235
+        y: 2
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4f1d41a25fcff17a0800000000000000
+      internalID: -6404122015194361356
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_L1
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 67
+        width: 16
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0822848fd11782300800000000000000
+      internalID: 227556154715677312
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_R1
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 67
+        width: 17
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c2c8914458b9346f0800000000000000
+      internalID: -701546120264184788
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_L2
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 52
+        width: 16
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5838f423bd5b0e450800000000000000
+      internalID: 6116088247015670661
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_R2
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 36
+        width: 17
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d3a225354709781e0800000000000000
+      internalID: -2195627464031327683
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_LEFT_MOUSE_Click
+      rect:
+        serializedVersion: 2
+        x: 170
+        y: 11
+        width: 5
+        height: 5
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 504abd6870cc488f0800000000000000
+      internalID: -539081722678238203
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_RIGHT_MOUSE_Click
+      rect:
+        serializedVersion: 2
+        x: 170
+        y: 4
+        width: 5
+        height: 5
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d96438f955656a320800000000000000
+      internalID: 2568835563209836189
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_BLOCK
+      rect:
+        serializedVersion: 2
+        x: 19
+        y: 30
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 62f715766e3553150800000000000000
+      internalID: 5851675539878805286
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_ATTACK
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 1
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 262a94c57d8b6d4c0800000000000000
+      internalID: -4263016762153786782
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_ATTACK_RANGED
+      rect:
+        serializedVersion: 2
+        x: 14
+        y: 1
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1618564f8ef6c9140800000000000000
+      internalID: 4727776755155566945
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_SLIDE
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 52
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7b0750568ee930d90800000000000000
+      internalID: -7132682663860277065
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_ENTER
+      rect:
+        serializedVersion: 2
+        x: 207
+        y: 30
+        width: 20
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1c4317b37b36b3520800000000000000
+      internalID: 2682847641656702145
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_prompts_SELECT
+      rect:
+        serializedVersion: 2
+        x: 220
+        y: 17
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0567f50c84d3390b0800000000000000
+      internalID: -5723163318783347120
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      button_prompts_0: -5354392173053672938
+      button_prompts_1: 4181717644597148883
+      button_prompts_2: 6706395345956290073
+      button_prompts_3: -5426778892417896171
+      button_prompts_4: 8930481642757489075
+      button_prompts_5: 2165865153844496687
+      button_prompts_6: -1875181574505611031
+      button_prompts_7: -2516767576312970959
+      button_prompts_8: -7347171335548313680
+      button_prompts_9: -4139531979748659697
+      button_prompts_A: 7265759573114270122
+      button_prompts_ALT: 7168066387052454438
+      button_prompts_ARROW_DOWN: 8059298323529068247
+      button_prompts_ARROW_LEFT: 5590209682216471564
+      button_prompts_ARROW_RIGHT: -7707356380524541288
+      button_prompts_ARROW_UP: -5732291367490856506
+      button_prompts_ATTACK: -4263016762153786782
+      button_prompts_ATTACK_RANGED: 4727776755155566945
+      button_prompts_B: 7964998389644731013
+      button_prompts_BLANK: 5094021259003808943
+      button_prompts_BLOCK: 5851675539878805286
+      button_prompts_C: 1902833016486946233
+      button_prompts_CAPS: 3086786960159825062
+      button_prompts_CTRL: 3866765757066156769
+      button_prompts_D: 7878269527211224507
+      button_prompts_DPAD: 6262501668073668671
+      button_prompts_DPAD_DOWN: -1531983565858568941
+      button_prompts_DPAD_LEFT: 3517920998650258390
+      button_prompts_DPAD_RIGHT: -239909066489476136
+      button_prompts_DPAD_UP: -6109485447906953311
+      button_prompts_E: 9153441256760567870
+      button_prompts_ENTER: 2682847641656702145
+      button_prompts_F: -2766186027392207137
+      button_prompts_G: -4466120388792100479
+      button_prompts_H: 8176203010903772454
+      button_prompts_I: -5539223773525155474
+      button_prompts_J: 6614284451114624917
+      button_prompts_K: -7017106344253171041
+      button_prompts_L: -8377239412011246348
+      button_prompts_L1: 227556154715677312
+      button_prompts_L2: 6116088247015670661
+      button_prompts_LEFT_BUMPER: 4542756090056223932
+      button_prompts_LEFT_MOUSE: 4811245723132420760
+      button_prompts_LEFT_MOUSE_Click: -539081722678238203
+      button_prompts_LEFT_TRIGGER: -7830857359264652674
+      button_prompts_M: -6892892591406537881
+      button_prompts_N: 6960042528499713434
+      button_prompts_O: -9099711028624896561
+      button_prompts_P: -6003635672619965717
+      button_prompts_PS_CIRCLE: 7360116524734552861
+      button_prompts_PS_CROSS: 4516531028223173959
+      button_prompts_PS_SQUARE: -8784216774483739404
+      button_prompts_PS_TRIANGLE: -6404122015194361356
+      button_prompts_Q: -9181449798894843059
+      button_prompts_R: -8137608295298008272
+      button_prompts_R1: -701546120264184788
+      button_prompts_R2: -2195627464031327683
+      button_prompts_RIGHT_BUMPER: -513576016792411538
+      button_prompts_RIGHT_MOUSE: -1873898155827764098
+      button_prompts_RIGHT_MOUSE_Click: 2568835563209836189
+      button_prompts_RIGHT_TRIGGER: -4874875217524570250
+      button_prompts_S: -1611562419950334635
+      button_prompts_SELECT: -5723163318783347120
+      button_prompts_SHIFT: -3153556074358229229
+      button_prompts_SLIDE: -7132682663860277065
+      button_prompts_SPACE: 7273311473878053613
+      button_prompts_T: -7906194721317990197
+      button_prompts_TAB: -7334622465905328415
+      button_prompts_U: -5989202030272016813
+      button_prompts_V: 6304094981646196498
+      button_prompts_W: -5956428367733637112
+      button_prompts_WIN: -4394737279280396872
+      button_prompts_X: -234378704618114291
+      button_prompts_XBOX_A: -6784652166764616607
+      button_prompts_XBOX_B: 3782517402365116253
+      button_prompts_XBOX_X: 9007018128798885367
+      button_prompts_XBOX_Y: -8363857770545714868
+      button_prompts_Y: 6106019204803622704
+      button_prompts_Z: -4032917008266610806
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
