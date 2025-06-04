@@ -197,7 +197,7 @@ MonoBehaviour:
   m_MinSize: {x: 100, y: 100}
   m_MaxSize: {x: 8096, y: 16192}
   vertical: 1
-  controlID: 55
+  controlID: 24
   draggingID: 0
 --- !u!114 &9
 MonoBehaviour:
@@ -302,7 +302,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 50}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 686
+  controlID: 90
   draggingID: 0
 --- !u!114 &13
 MonoBehaviour:
@@ -1166,9 +1166,9 @@ MonoBehaviour:
   m_AudioPlay: 0
   m_DebugDrawModesUseInteractiveLightBakingData: 0
   m_Position:
-    m_Target: {x: 97.80354, y: -1.4019803, z: -9.972582}
+    m_Target: {x: 38.969414, y: -0.50823593, z: -0.084829606}
     speed: 2
-    m_Value: {x: 97.31945, y: -1.4037279, z: -9.977003}
+    m_Value: {x: 38.672966, y: -0.55438936, z: -0.08033848}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -1218,9 +1218,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 9.383412
+    m_Target: 10.4292965
     speed: 2
-    m_Value: 9.8255625
+    m_Value: 9.980188
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -1441,7 +1441,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Art/Enemies/Boss
+    - Assets
     m_Globs: []
     m_ProductIds: 
     m_AnyWithAssetOrigin: 0
@@ -1451,16 +1451,16 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 96
   m_LastFolders:
-  - Assets/Art/Enemies/Boss
+  - Assets
   m_LastFoldersGridSize: 96
-  m_LastProjectPath: C:\gamedev\unity\28-05-H
+  m_LastProjectPath: C:\gamedev\unity\28-05-H\Unity_2D_Goblin_Slayer
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 31}
-    m_SelectedIDs: dcc30000
-    m_LastClickedID: 50140
-    m_ExpandedIDs: 0000000044c1000046c1000048c100004ac100004cc100004ec1000050c1000052c1000098c30000
+    m_SelectedIDs: a8c40000
+    m_LastClickedID: 50344
+    m_ExpandedIDs: 000000005ac200005cc200005ec2000060c2000062c2000064c2000066c2000068c20000a8c40000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1489,7 +1489,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 0000000044c1000046c1000048c100004ac100004cc100004ec1000050c1000052c10000
+    m_ExpandedIDs: 000000005ac200005cc200005ec2000060c2000062c2000064c2000066c2000068c20000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1649,7 +1649,7 @@ MonoBehaviour:
     m_OverlaysVisible: 1
   m_LockTracker:
     m_IsLocked: 0
-  m_LastSelectedObjectID: -5974
+  m_LastSelectedObjectID: 47868
 --- !u!114 &24
 MonoBehaviour:
   m_ObjectHideFlags: 52
