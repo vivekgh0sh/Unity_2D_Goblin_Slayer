@@ -1,10 +1,12 @@
-﻿using UnityEngine;
+﻿// Player.cs
+using UnityEngine;
+using UnityEngine.UI; // <<< REQUIRED for UI elements
 using System.Collections;
 
 public class Player : MonoBehaviour
 {
     public int Health = 10;
-    public int maxHealth = 10; // Added for respawn
+    public int maxHealth = 10;
     public float Speed = 5f;
     public float JumpStrength = 10f;
     public LayerMask LayerMask;
@@ -34,22 +36,21 @@ public class Player : MonoBehaviour
     public AudioClip blockImpactSfx;
     public AudioClip[] attackSfx;
     public AudioClip shootSfx;
-    public AudioClip deathSfx; // Added
-    public AudioClip checkpointReachedSfx; // Added
+    public AudioClip deathSfx;
+    public AudioClip checkpointReachedSfx;
+
+    [Header("UI")] // <<< NEW SECTION FOR UI
+    public Image healthBarFillImage; // <<< REFERENCE TO THE HEALTH BAR FILL IMAGE
 
     private AudioSource _audioSource;
-
     private float _Horizontal;
     private Rigidbody2D _R2D;
     private Animator _animator;
     private SpriteRenderer _renderer;
     private CapsuleCollider2D _collider;
 
-    // --- MODIFIED ---
-    public bool _IsDeath { get; private set; } // Public getter, private setter for controlled access
-    // --- END MODIFIED ---
-
-    private Vector3 _initialStartPosition; // For initial checkpoint
+    public bool _IsDeath { get; private set; }
+    private Vector3 _initialStartPosition;
 
     // Animator Hashes
     private int RunHash = Animator.StringToHash("IsRunning");
@@ -60,7 +61,6 @@ public class Player : MonoBehaviour
     private int ShootArrowHash = Animator.StringToHash("ShootArrow");
     private int SlamHash = Animator.StringToHash("Slam");
     private int BlockHash = Animator.StringToHash("Block");
-
 
     private bool _IsGrounded => Physics2D.BoxCast(
         _collider.bounds.center,
@@ -94,14 +94,13 @@ public class Player : MonoBehaviour
             }
         }
 
-        // --- ADDED FOR CHECKPOINT ---
         _initialStartPosition = transform.position;
-        // Ensure Checkpoint system is initialized with player's starting spot if no other initial is set
-        if (Checkpoint.LastCheckpointPosition == Vector3.zero || !Checkpoint._initialCheckpointSet_InternalUseOnly) // Using a more specific flag from Checkpoint script
+        if (Checkpoint.LastCheckpointPosition == Vector3.zero || !Checkpoint._initialCheckpointSet_InternalUseOnly)
         {
             Checkpoint.ResetToInitialCheckpoint(_initialStartPosition);
         }
-        // --- END ADDED ---
+
+        UpdateHealthUI(); // <<< CALL TO INITIALIZE HEALTH BAR
     }
 
     private void Update()
@@ -125,8 +124,10 @@ public class Player : MonoBehaviour
         }
         else
         {
-            // For Rigidbody based movement, setting velocity to zero is better than linearVelocity
-            _R2D.linearVelocity = new Vector2(0, _R2D.linearVelocity.y);
+            if (_R2D != null) // Null check for safety
+            {
+                _R2D.linearVelocity = new Vector2(0, _R2D.linearVelocity.y); // Changed to .velocity
+            }
         }
     }
 
@@ -165,7 +166,6 @@ public class Player : MonoBehaviour
         }
     }
 
-
     private void HandleMovementInput()
     {
         _Horizontal = Input.GetAxisRaw("Horizontal");
@@ -173,48 +173,54 @@ public class Player : MonoBehaviour
 
     private void ApplyMovement()
     {
-        // Using Rigidbody.velocity for physics based movement
-        _R2D.linearVelocity = new Vector2(_Horizontal * Speed, _R2D.linearVelocity.y);
-        _animator.SetBool(RunHash, Mathf.Abs(_Horizontal) > 0.01f);
+        if (_R2D != null) // Null check
+        {
+            _R2D.linearVelocity = new Vector2(_Horizontal * Speed, _R2D.linearVelocity.y); // Changed to .velocity
+        }
+        if (_animator != null) // Null check
+        {
+            _animator.SetBool(RunHash, Mathf.Abs(_Horizontal) > 0.01f);
+        }
     }
 
-   private void FlipX()
-{
-    if (_Horizontal < 0 && !_renderer.flipX)
+    private void FlipX()
     {
-        _renderer.flipX = true;
-        FlipChildTransformLocalPositionX(arrowSpawnPoint);
-        FlipChildTransformLocalPositionX(dustSpawnPoint);
-        FlipChildTransformLocalPositionX(attackHitbox.transform); // <<< ADDED THIS (using .transform)
-    }
-    else if (_Horizontal > 0 && _renderer.flipX)
-    {
-        _renderer.flipX = false;
-        FlipChildTransformLocalPositionX(arrowSpawnPoint); // No need for 'true' here, it just inverts
-        FlipChildTransformLocalPositionX(dustSpawnPoint);
-        FlipChildTransformLocalPositionX(attackHitbox.transform); // <<< ADDED THIS (using .transform)
-    }
-}
+        if (_renderer == null) return; // Null check
 
-// NEW Helper method to flip localPosition.x
-private void FlipChildTransformLocalPositionX(Transform child)
-{
-    if (child != null)
-    {
-        // Invert the current localPosition.x
-        child.localPosition = new Vector3(-child.localPosition.x, child.localPosition.y, child.localPosition.z);
+        if (_Horizontal < 0 && !_renderer.flipX)
+        {
+            _renderer.flipX = true;
+            FlipChildTransformLocalPositionX(arrowSpawnPoint);
+            FlipChildTransformLocalPositionX(dustSpawnPoint);
+            if (attackHitbox != null) FlipChildTransformLocalPositionX(attackHitbox.transform);
+        }
+        else if (_Horizontal > 0 && _renderer.flipX)
+        {
+            _renderer.flipX = false;
+            FlipChildTransformLocalPositionX(arrowSpawnPoint);
+            FlipChildTransformLocalPositionX(dustSpawnPoint);
+            if (attackHitbox != null) FlipChildTransformLocalPositionX(attackHitbox.transform);
+        }
     }
-}
 
+    private void FlipChildTransformLocalPositionX(Transform child)
+    {
+        if (child != null)
+        {
+            child.localPosition = new Vector3(-child.localPosition.x, child.localPosition.y, child.localPosition.z);
+        }
+    }
 
     private void HandleJumpAndFall()
     {
+        if (_R2D == null || _animator == null) return; // Null checks
+
         bool isGroundedThisFrame = _IsGrounded;
 
         if (isGroundedThisFrame && !_wasGroundedLastFrame)
         {
             _jumpCount = 0;
-            if (_R2D.linearVelocity.y < -1f) // Check for actual fall velocity, not just touching ground
+            if (_R2D.linearVelocity.y < -1f)
             {
                 PlayDustImpactFX();
                 PlaySound(landSfx);
@@ -225,7 +231,7 @@ private void FlipChildTransformLocalPositionX(Transform child)
         {
             if (_jumpCount == 0)
             {
-                if (isGroundedThisFrame || _wasGroundedLastFrame)
+                if (isGroundedThisFrame || _wasGroundedLastFrame) // Allow jump slightly after leaving ground
                 {
                     _R2D.linearVelocity = new Vector2(_R2D.linearVelocity.x, 0f);
                     _R2D.AddForce(Vector2.up * JumpStrength, ForceMode2D.Impulse);
@@ -273,12 +279,14 @@ private void FlipChildTransformLocalPositionX(Transform child)
 
     private void HandleAttack()
     {
+        if (_animator == null || _R2D == null) return; // Null checks
+
         if (Input.GetMouseButtonDown(0) && !_IsDeath)
         {
             bool currentFrameGrounded = _IsGrounded;
             if (!currentFrameGrounded)
             {
-                if (_R2D.linearVelocity.y > 0)
+                if (_R2D.linearVelocity.y > 0) // Check velocity for jump attack type
                     _animator.SetTrigger("JumpAttack1");
                 else
                     _animator.SetTrigger("JumpAttack2");
@@ -290,7 +298,7 @@ private void FlipChildTransformLocalPositionX(Transform child)
                     _attackComboIndex = 0;
                 }
                 _attackComboIndex++;
-                if (_attackComboIndex > 4) _attackComboIndex = 1;
+                if (_attackComboIndex > 4) _attackComboIndex = 1; // Assuming 4 attack animations
                 _animator.SetTrigger($"Attack{_attackComboIndex}");
                 _lastAttackTime = Time.time;
             }
@@ -320,12 +328,14 @@ private void FlipChildTransformLocalPositionX(Transform child)
 
     private void HandleBlock()
     {
+        if (_animator == null) return; // Null check
+
         if (Input.GetMouseButtonDown(1) && !_IsDeath)
         {
             _animator.SetBool(BlockHash, true);
             PlaySound(blockActivateSfx);
         }
-        if (Input.GetMouseButtonUp(1) && !_IsDeath)
+        if (Input.GetMouseButtonUp(1) && !_IsDeath) // Consider checking _animator.GetBool(BlockHash) if problems occur
         {
             _animator.SetBool(BlockHash, false);
         }
@@ -333,17 +343,21 @@ private void FlipChildTransformLocalPositionX(Transform child)
 
     private void HandleSlam()
     {
+        if (_animator == null || _R2D == null) return; // Null checks
+
         if (Input.GetKeyDown(KeyCode.S) && !_IsGrounded && !_isSlamming && !_IsDeath)
         {
             _isSlamming = true;
             _animator.SetTrigger(SlamHash);
-            _R2D.linearVelocity = new Vector2(_R2D.linearVelocity.x, 0);
+            _R2D.linearVelocity = new Vector2(_R2D.linearVelocity.x, 0); // Reset Y velocity for consistent slam
             _R2D.AddForce(Vector2.down * SlamForce, ForceMode2D.Impulse);
         }
     }
 
     private void HandleArrowShooting()
     {
+        if (_animator == null) return; // Null check
+
         if (Input.GetKeyDown(KeyCode.E) && !_IsDeath)
         {
             _animator.SetTrigger(ShootArrowHash);
@@ -353,9 +367,9 @@ private void FlipChildTransformLocalPositionX(Transform child)
     public void FireArrow()
     {
         PlaySound(shootSfx);
-        if (arrowPrefab == null || arrowSpawnPoint == null)
+        if (arrowPrefab == null || arrowSpawnPoint == null || _renderer == null)
         {
-            Debug.LogError("Arrow prefab or spawn point not set on Player.");
+            Debug.LogError("Arrow prefab, spawn point, or renderer not set on Player.");
             return;
         }
 
@@ -365,7 +379,7 @@ private void FlipChildTransformLocalPositionX(Transform child)
         if (arrowScript != null)
         {
             arrowScript.direction = _renderer.flipX ? Vector2.left : Vector2.right;
-            if (_renderer.flipX)
+            if (_renderer.flipX) // Adjust arrow visual flip if needed
             {
                 arrowGO.transform.localScale = new Vector3(-Mathf.Abs(arrowGO.transform.localScale.x), arrowGO.transform.localScale.y, arrowGO.transform.localScale.z);
             }
@@ -386,82 +400,99 @@ private void FlipChildTransformLocalPositionX(Transform child)
         }
     }
 
-    // --- ADDED FOR CHECKPOINT ---
-    public void PlayCheckpointReachedSound() // Public method to be called by Checkpoint script if needed
+    public void PlayCheckpointReachedSound()
     {
         PlaySound(checkpointReachedSfx);
     }
 
-    // --- END ADDED ---
-
-    // --- MODIFIED FOR RESPAWN ---
-    [System.Obsolete]
+    // Mark as Obsolete if you plan to replace this system later
+    // [System.Obsolete("Consider a more robust death/respawn manager.")]
     public void Die()
     {
         if (_IsDeath) return;
 
         Debug.Log("Player Died!");
-        _IsDeath = true; // Set death flag
-        _animator.Play("Death"); // Play death animation
-        PlaySound(deathSfx);   // Play death sound
+        _IsDeath = true;
+        if (_animator != null) _animator.Play("Death");
+        PlaySound(deathSfx);
 
-        _R2D.linearVelocity = Vector2.zero;     // Stop all movement
-        _R2D.isKinematic = true;          // Make Rigidbody not affected by physics
-        _collider.enabled = false;        // Disable collider to prevent interactions
+        if (_R2D != null)
+        {
+            _R2D.linearVelocity = Vector2.zero;
+            _R2D.isKinematic = true;
+        }
+        if (_collider != null) _collider.enabled = false;
 
-        // Consider disabling other input/control scripts if you have them
-        // e.g., if (TryGetComponent<YourPlayerInputScript>(out var inputScript)) inputScript.enabled = false;
-
-        StartCoroutine(RespawnPlayerCoroutine(2f)); // Start respawn process after a delay
+        StartCoroutine(RespawnPlayerCoroutine(2f));
+        UpdateHealthUI(); // <<< UPDATE UI ON DEATH
     }
 
-    [System.Obsolete]
+    // Mark as Obsolete if you plan to replace this system later
+    // [System.Obsolete("Consider a more robust death/respawn manager.")]
     private IEnumerator RespawnPlayerCoroutine(float delay)
     {
         yield return new WaitForSeconds(delay);
 
         Debug.Log("Respawning player at: " + Checkpoint.LastCheckpointPosition);
-        transform.position = Checkpoint.LastCheckpointPosition; // Move to checkpoint
+        transform.position = Checkpoint.LastCheckpointPosition;
 
-        // Reset player state
-        Health = maxHealth; // Reset to max health
-        _IsDeath = false;   // Clear death flag
-        _jumpCount = 0;     // Reset jump count
-        _isSlamming = false; // Reset slam state
-        _wasGroundedLastFrame = true; // Assume grounded on respawn for immediate jump
+        Health = maxHealth;
+        _IsDeath = false;
+        _jumpCount = 0;
+        _isSlamming = false;
+        _wasGroundedLastFrame = true;
 
-        _animator.Play("Idle"); // Or a specific respawn/idle animation
-        _R2D.isKinematic = false; // Re-enable physics
-        _collider.enabled = true;  // Re-enable collider
+        if (_animator != null) _animator.Play("Idle");
+        if (_R2D != null) _R2D.isKinematic = false;
+        if (_collider != null) _collider.enabled = true;
 
-        // Re-enable input/control scripts if they were disabled
-        // e.g., if (TryGetComponent<YourPlayerInputScript>(out var inputScript)) inputScript.enabled = true;
-
-        // Update health UI if applicable
-        // UpdateHealthUI();
+        UpdateHealthUI(); // <<< UPDATE UI ON RESPAWN
     }
 
-    [System.Obsolete]
+    // Mark as Obsolete if you plan to replace this system later
+    // [System.Obsolete("Consider a more robust damage system.")]
     public void TakePlayerDamage(int amount = 1)
     {
         if (_IsDeath) return;
 
-        if (_animator.GetBool(BlockHash))
+        if (_animator != null && _animator.GetBool(BlockHash))
         {
             PlaySound(blockImpactSfx);
             return;
         }
 
         Health -= amount;
-        Debug.Log($"Player took {amount} damage. Current Health: {Health}");
+        Health = Mathf.Max(Health, 0); // Ensure health doesn't go below 0
+        Debug.Log($"Player took {amount} damage. Current Health: {Health}/{maxHealth}");
 
-        // UpdateHealthUI();
+        UpdateHealthUI(); // <<< UPDATE UI ON TAKING DAMAGE
 
-        if (Health <= 0 && !_IsDeath) // Ensure Die is only called once
+        if (Health <= 0 && !_IsDeath)
         {
-            Health = 0; // Clamp health
-            Die();      // Call new Die method
+            // Health = 0; // Already clamped by Mathf.Max
+            Die();
         }
     }
 
+    // <<< NEW METHOD TO UPDATE HEALTH UI >>>
+    public void UpdateHealthUI()
+    {
+        if (healthBarFillImage != null)
+        {
+            if (maxHealth > 0) // Prevent division by zero if maxHealth isn't set properly
+            {
+                healthBarFillImage.fillAmount = (float)Health / maxHealth;
+            }
+            else
+            {
+                healthBarFillImage.fillAmount = 0; // Or 1, depending on desired behavior for 0 max health
+                Debug.LogWarning("Player MaxHealth is 0 or less. Health UI may not display correctly.");
+            }
+        }
+        else
+        {
+            // This warning is helpful during setup but can be commented out later if you're sure it's always assigned.
+            // Debug.LogWarning("Player: HealthBarFillImage is not assigned in the Inspector!");
+        }
+    }
 }

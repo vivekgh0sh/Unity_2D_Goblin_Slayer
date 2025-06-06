@@ -1,86 +1,156 @@
-
+// Enemy.cs
 using UnityEngine;
-using UnityEngine.UI; // Required for UI elements like Image if you use it for health bar fill
+using UnityEngine.UI; // REQUIRED for UI elements
 
 public class Enemy : MonoBehaviour
 {
     public float Distance;
     public int Speed;
     public float AttackCooldown = 1f;
-    public int Damage = 1; // Damage this enemy deals
+    public int Damage = 1;
+
+    public int maxHealth = 10;
+    public int Health;
+
+    [Header("UI Setup")]
+    public GameObject healthBarPrefab;
+    public Vector3 healthBarOffset = new Vector3(0, 1.5f, 0);
+
+    private Image _healthBarFillImage;
+    private Canvas _healthBarCanvasInstance;
+    private Camera _mainCamera;
+
     private float _lastAttackTime;
-
-    public int maxHealth = 10; // Max health for the enemy
-    public int Health;         // Current health
-    public GameObject HealthBarUI; // The parent UI element for the health bar (e.g., a Canvas or Panel)
-    public Transform HealthBarFill; // The UI Image Transform used as the fill part of the health bar
-
     private Transform _player;
-
-    public Transform Target;
-    public Transform AttackTarget;
-
+    public Transform Target; // For patrol raycasts
+    public Transform AttackTarget; // For attack hit detection
     private Animator _animator;
+
+    // --- State Booleans ---
     private bool _isRight = true;
     private bool _isAttacking = false;
-    private int AttackHash = Animator.StringToHash("IsAttacking");
+    private bool _isPatrolling = false; // <<< NEW: To control patrolling state
+
+    // --- Animator Hashes ---
+    private static readonly int AttackTriggerHash = Animator.StringToHash("Attack"); // Assuming "Attack" is a Trigger
+    private static readonly int IsAttackingBoolHash = Animator.StringToHash("IsAttacking"); // If you also have a bool for attack loop
+    private static readonly int IsWalkingHash = Animator.StringToHash("IsWalking"); // For patrol/walk animation
 
     private void Awake()
     {
         _animator = GetComponent<Animator>();
-        Health = maxHealth; // Initialize health
+        Health = maxHealth;
+        _mainCamera = Camera.main;
     }
 
     private void Start()
     {
-        UpdateHealthBar(); // Initial health bar update
+        SetupHealthBar();
+        UpdateHealthBarVisuals();
+
+        // Start patrolling immediately
+        _isPatrolling = true;
+        if (_animator != null)
+        {
+            _animator.SetBool(IsWalkingHash, true); // Tell animator to play walk/patrol animation
+        }
+    }
+
+    void SetupHealthBar()
+    {
+        if (healthBarPrefab == null)
+        {
+            Debug.LogWarning($"Health Bar Prefab not assigned for {gameObject.name}. UI will not be displayed.");
+            return;
+        }
+
+        GameObject canvasGO = Instantiate(healthBarPrefab, transform.position + healthBarOffset, Quaternion.identity);
+        _healthBarCanvasInstance = canvasGO.GetComponent<Canvas>();
+
+        if (_healthBarCanvasInstance == null)
+        {
+            Debug.LogError($"Instantiated Health Bar Prefab for {gameObject.name} is missing a Canvas component.");
+            Destroy(canvasGO);
+            return;
+        }
+
+        _healthBarCanvasInstance.transform.SetParent(transform);
+        _healthBarCanvasInstance.transform.localPosition = healthBarOffset;
+
+        Transform fillTransform = _healthBarCanvasInstance.transform.Find("HealthBar_Background_Enemy/HealthBar_Fill_Enemy");
+        if (fillTransform != null)
+        {
+            _healthBarFillImage = fillTransform.GetComponent<Image>();
+        }
+
+        if (_healthBarFillImage == null)
+        {
+            Debug.LogError($"Could not find 'HealthBar_Fill_Enemy' Image component for {gameObject.name}. Check prefab names.");
+        }
+    }
+
+    private void LateUpdate()
+    {
+        if (_healthBarCanvasInstance != null && _mainCamera != null)
+        {
+            _healthBarCanvasInstance.transform.LookAt(transform.position + _mainCamera.transform.rotation * Vector3.forward,
+                                                      _mainCamera.transform.rotation * Vector3.up);
+        }
     }
 
     private void Update()
     {
-        if (!_isAttacking)
+        if (_isPatrolling && !_isAttacking)
         {
             Patrol();
+            // Ensure walk animation is playing if animator exists and isn't already set
+            if (_animator != null && !_animator.GetBool(IsWalkingHash))
+            {
+                _animator.SetBool(IsWalkingHash, true);
+            }
+        }
+        else if (_isAttacking)
+        {
+            // If there's specific logic for while attacking (besides OnTriggerStay), it goes here.
+            // For example, ensuring walk animation is off:
+            if (_animator != null && _animator.GetBool(IsWalkingHash))
+            {
+                _animator.SetBool(IsWalkingHash, false);
+            }
+        }
+        else // Not patrolling and not attacking (e.g., could be idle)
+        {
+            if (_animator != null && _animator.GetBool(IsWalkingHash))
+            {
+                _animator.SetBool(IsWalkingHash, false); // Turn off walking if idle
+            }
+            // Add idle behavior if needed
         }
     }
 
     private void Patrol()
     {
-        transform.Translate(Vector3.right * Speed * Time.deltaTime);
+        if (Target == null)
+        {
+            // Debug.LogWarning($"{gameObject.name}: Target for patrol raycasts not assigned.");
+            return;
+        }
+
+        transform.Translate(Vector3.right * Speed * Time.deltaTime, Space.Self); // Move in local space
 
         RaycastHit2D groundHit = Physics2D.Raycast(Target.position, Vector2.down, Distance);
         RaycastHit2D wallHit = Physics2D.Raycast(Target.position, transform.right, 0.3f);
 
-        if (!groundHit.collider || wallHit.collider)
+        if (!groundHit.collider || (wallHit.collider && !wallHit.collider.isTrigger))
         {
             Flip();
         }
-
-        Debug.DrawRay(Target.position, Vector2.down * Distance, Color.green);
-        Debug.DrawRay(Target.position, transform.right * 0.3f, Color.red);
     }
 
     private void Flip()
     {
-        if (_isRight)
-        {
-            transform.rotation = Quaternion.Euler(0, 180, 0);
-            _isRight = false;
-        }
-        else
-        {
-            transform.rotation = Quaternion.identity;
-            _isRight = true;
-        }
-        // Flip the health bar as well if it's a child and world space UI
-        if (HealthBarUI != null && HealthBarUI.transform.parent == transform)
-        {
-            HealthBarUI.transform.localScale = new Vector3(
-                _isRight ? Mathf.Abs(HealthBarUI.transform.localScale.x) : -Mathf.Abs(HealthBarUI.transform.localScale.x),
-                HealthBarUI.transform.localScale.y,
-                HealthBarUI.transform.localScale.z
-            );
-        }
+        _isRight = !_isRight;
+        transform.Rotate(0f, 180f, 0f);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -89,7 +159,12 @@ public class Enemy : MonoBehaviour
         {
             _player = collision.transform;
             _isAttacking = true;
-            _animator.SetBool(AttackHash, true);
+            _isPatrolling = false; // Stop patrolling
+            if (_animator != null)
+            {
+                _animator.SetBool(IsAttackingBoolHash, true); // Use your actual attack bool
+                _animator.SetBool(IsWalkingHash, false);    // Stop walking animation
+            }
         }
     }
 
@@ -97,16 +172,15 @@ public class Enemy : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            FacePlayer();
+            FacePlayer(); // Keep facing player while in trigger
 
             if (Time.time - _lastAttackTime >= AttackCooldown)
             {
-                _animator.SetTrigger("Attack");
+                if (_animator != null) _animator.SetTrigger(AttackTriggerHash); // Fire attack animation
                 _lastAttackTime = Time.time;
             }
         }
     }
-
 
     private void OnTriggerExit2D(Collider2D collision)
     {
@@ -114,18 +188,28 @@ public class Enemy : MonoBehaviour
         {
             _player = null;
             _isAttacking = false;
-            _animator.SetBool(AttackHash, false);
+            _isPatrolling = true; // Resume patrolling
+            if (_animator != null)
+            {
+                _animator.SetBool(IsAttackingBoolHash, false);
+                _animator.SetBool(IsWalkingHash, true); // Start walking animation
+            }
         }
     }
+
     private void FacePlayer()
     {
         if (_player == null) return;
 
-        if (_player.position.x > transform.position.x && !_isRight)
+        // Determine direction to player
+        bool playerIsToTheRight = _player.position.x > transform.position.x;
+
+        // Flip if current direction (_isRight) doesn't match direction to player
+        if (playerIsToTheRight && !_isRight)
         {
             Flip();
         }
-        else if (_player.position.x < transform.position.x && _isRight)
+        else if (!playerIsToTheRight && _isRight)
         {
             Flip();
         }
@@ -133,18 +217,15 @@ public class Enemy : MonoBehaviour
 
     public void DealDamage()
     {
-        // This is called by animation event for enemy's attack
-        // You would check if _player is still in range and deal damage to player
-        if (_player != null)
+        if (_player != null && AttackTarget != null)
         {
-            // Example: Check distance or use a small OverlapCircle for attack hit detection
-            float attackRange = 1.5f; // Define an attack range
+            float attackRange = 1.5f;
             if (Vector2.Distance(AttackTarget.position, _player.position) < attackRange)
             {
                 Player playerScript = _player.GetComponent<Player>();
-                if (playerScript != null)
+                if (playerScript != null && !playerScript._IsDeath)
                 {
-                    playerScript.TakePlayerDamage(Damage); // Enemy deals damage to player
+                    playerScript.TakePlayerDamage(Damage);
                 }
             }
         }
@@ -153,46 +234,62 @@ public class Enemy : MonoBehaviour
     public void TakeDamage(int amount)
     {
         Health -= amount;
-        Debug.Log($"{gameObject.name} took {amount} damage. Current Health: {Health}/{maxHealth}"); // Console log
+        Health = Mathf.Max(Health, 0);
+        Debug.Log($"{gameObject.name} took {amount} damage. Current Health: {Health}/{maxHealth}");
 
-        UpdateHealthBar();
+        UpdateHealthBarVisuals();
 
         if (Health <= 0)
         {
-            Health = 0; // Ensure health doesn't go negative
             Die();
         }
     }
 
-    private void UpdateHealthBar()
+    private void UpdateHealthBarVisuals()
     {
-        if (HealthBarFill != null)
+        if (_healthBarFillImage != null)
         {
-            // Assuming HealthBarFill is an Image with Fill Method set to Horizontal
-            // If it's a direct transform scale:
-            HealthBarFill.localScale = new Vector3((float)Health / maxHealth, 1f, 1f);
-
-            // If HealthBarFill is an Image component (UnityEngine.UI.Image):
-            // Image fillImage = HealthBarFill.GetComponent<Image>();
-            // if (fillImage != null)
-            // {
-            //    fillImage.fillAmount = (float)Health / maxHealth;
-            // }
+            if (maxHealth > 0)
+            {
+                _healthBarFillImage.fillAmount = (float)Health / maxHealth;
+            }
+            else
+            {
+                _healthBarFillImage.fillAmount = 0;
+            }
         }
-        if (HealthBarUI != null)
+
+        if (_healthBarCanvasInstance != null)
         {
-            // Keep health bar facing the camera if it's world space UI
-            // Or handle visibility based on health
-            HealthBarUI.SetActive(Health > 0 && Health < maxHealth); // Show only when damaged but not dead
+
+            bool shouldBeActive = Health > 0 && Health < maxHealth;
+
+            if (_healthBarCanvasInstance.gameObject.activeSelf != shouldBeActive)
+            {
+                _healthBarCanvasInstance.gameObject.SetActive(shouldBeActive);
+            }
         }
     }
 
     private void Die()
     {
         Debug.Log($"{gameObject.name} has died.");
-        // Optional: Play death animation
-        // _animator.SetTrigger("Die");
-        // Destroy(gameObject, deathAnimationDuration);
-        Destroy(gameObject);
+        _isPatrolling = false; // Stop all activities
+        _isAttacking = false;
+
+        if (_healthBarCanvasInstance != null)
+        {
+            Destroy(_healthBarCanvasInstance.gameObject);
+        }
+        // if (_animator != null) _animator.SetTrigger("DieTrigger");
+        Destroy(gameObject /*, optionalDelayForAnimation */);
+    }
+
+    private void OnDestroy()
+    {
+        if (_healthBarCanvasInstance != null)
+        {
+            Destroy(_healthBarCanvasInstance.gameObject);
+        }
     }
 }
