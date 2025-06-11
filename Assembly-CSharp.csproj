@@ -68,6 +68,7 @@
     <Compile Include="Assets\Menu.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerAttackHitbox.cs" />
     <Compile Include="Assets\Scripts\Player\Effect.cs" />
+    <Compile Include="Assets\Scripts\OptionsMenu.cs" />
     <Compile Include="Assets\Scripts\Mech\MovingPlatform2D.cs" />
     <Compile Include="Assets\Scripts\Player\Player.cs" />
     <Compile Include="Assets\Scripts\Player\arrow.cs" />
