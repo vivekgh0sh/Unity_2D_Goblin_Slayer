@@ -3,11 +3,15 @@
   "WorkspaceRootPath": "D:\\vivekgh0sh\\Unity_2D_Goblin_Slayer\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{07507546-A899-BCAB-05F2-1038B679D430}|Assembly-CSharp.csproj|d:\\vivekgh0sh\\unity_2d_goblin_slayer\\assets\\scripts\\optionsmenu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{07507546-A899-BCAB-05F2-1038B679D430}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\optionsmenu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{07507546-A899-BCAB-05F2-1038B679D430}|Assembly-CSharp.csproj|d:\\vivekgh0sh\\unity_2d_goblin_slayer\\assets\\menu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{07507546-A899-BCAB-05F2-1038B679D430}|Assembly-CSharp.csproj|solutionrelative:assets\\menu.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{07507546-A899-BCAB-05F2-1038B679D430}|Assembly-CSharp.csproj|d:\\vivekgh0sh\\unity_2d_goblin_slayer\\assets\\scripts\\enemy\\goblin\\enemy.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{07507546-A899-BCAB-05F2-1038B679D430}|Assembly-CSharp.csproj|D:\\vivekgh0sh\\Unity_2D_Goblin_Slayer\\assets\\scripts\\enemy\\goblin\\enemy.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{07507546-A899-BCAB-05F2-1038B679D430}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\enemy\\goblin\\enemy.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
@@ -31,6 +35,19 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "OptionsMenu.cs",
+              "DocumentMoniker": "D:\\vivekgh0sh\\Unity_2D_Goblin_Slayer\\Assets\\Scripts\\OptionsMenu.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\OptionsMenu.cs",
+              "ToolTip": "D:\\vivekgh0sh\\Unity_2D_Goblin_Slayer\\Assets\\Scripts\\OptionsMenu.cs",
+              "RelativeToolTip": "Assets\\Scripts\\OptionsMenu.cs",
+              "ViewState": "AgIAAJIAAAAAAAAAAAAqwMcAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-11T06:22:16.378Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "Menu.cs",
               "DocumentMoniker": "D:\\vivekgh0sh\\Unity_2D_Goblin_Slayer\\Assets\\Menu.cs",
               "RelativeDocumentMoniker": "Assets\\Menu.cs",
@@ -43,7 +60,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "Enemy.cs",
               "DocumentMoniker": "D:\\vivekgh0sh\\Unity_2D_Goblin_Slayer\\Assets\\Scripts\\enemy\\goblin\\Enemy.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\enemy\\goblin\\Enemy.cs",
@@ -51,12 +68,11 @@
               "RelativeToolTip": "Assets\\Scripts\\enemy\\goblin\\Enemy.cs",
               "ViewState": "AgIAAPIAAAAAAAAAAAAhwAcBAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-06T07:06:29.203Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-06-06T07:06:29.203Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "Player.cs",
               "DocumentMoniker": "D:\\vivekgh0sh\\Unity_2D_Goblin_Slayer\\Assets\\Scripts\\Player\\Player.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\Player\\Player.cs",
@@ -68,7 +84,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "PlayerAttackHitbox.cs",
               "DocumentMoniker": "D:\\vivekgh0sh\\Unity_2D_Goblin_Slayer\\Assets\\Scripts\\Player\\PlayerAttackHitbox.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\Player\\PlayerAttackHitbox.cs",

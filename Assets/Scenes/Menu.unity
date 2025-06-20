@@ -1055,7 +1055,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2056280857}
         m_TargetAssemblyTypeName: OptionsMenu, Assembly-CSharp
-        m_MethodName: SetSFXVolume
+        m_MethodName: OnMusicVolumeSliderChanged
         m_Mode: 4
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1443,7 +1443,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2056280857}
         m_TargetAssemblyTypeName: OptionsMenu, Assembly-CSharp
-        m_MethodName: SetMusicVolume
+        m_MethodName: OnSFXVolumeSliderChanged
         m_Mode: 4
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2122,7 +2122,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2056280857}
         m_TargetAssemblyTypeName: OptionsMenu, Assembly-CSharp
-        m_MethodName: ApplyGraphicsSettings
+        m_MethodName: OnApplyButtonClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3059,8 +3059,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2056280857}
         m_TargetAssemblyTypeName: OptionsMenu, Assembly-CSharp
-        m_MethodName: SetFullscreen
-        m_Mode: 6
+        m_MethodName: OnResolutionDropdownChanged
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -4081,7 +4081,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2056280857}
         m_TargetAssemblyTypeName: OptionsMenu, Assembly-CSharp
-        m_MethodName: SetResolutionFromDropdown
+        m_MethodName: OnResolutionDropdownChanged
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4215,7 +4215,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2056280857}
         m_TargetAssemblyTypeName: OptionsMenu, Assembly-CSharp
-        m_MethodName: CloseOptionsPanel
+        m_MethodName: CloseOptionsPanelAndRevert
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5127,7 +5127,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2056280857}
         m_TargetAssemblyTypeName: OptionsMenu, Assembly-CSharp
-        m_MethodName: SetMasterVolume
+        m_MethodName: OnMasterVolumeSliderChanged
         m_Mode: 4
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5347,6 +5347,7 @@ MonoBehaviour:
   fullscreenToggle: {fileID: 1043056671}
   optionsPanel: {fileID: 1641458402}
   mainMenuPanel: {fileID: 913965253}
+  applyButton: {fileID: 0}
 --- !u!1 &2088761289
 GameObject:
   m_ObjectHideFlags: 0

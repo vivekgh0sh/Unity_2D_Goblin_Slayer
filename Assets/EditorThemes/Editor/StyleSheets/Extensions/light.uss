@@ -5,27 +5,27 @@
 
 .TabWindowBackground
 {
-	background-color: rgba(154, 154, 154, 1);
+	background-color: rgba(224, 224, 224, 1);
 }
 
 .ScrollViewAlt
 {
-	background-color: rgba(154, 154, 154, 1);
+	background-color: rgba(224, 224, 224, 1);
 }
 
 .label
 {
-	background-color: rgba(154, 154, 154, 1);
+	background-color: rgba(224, 224, 224, 1);
 }
 
 .ProjectBrowserTopBarBg
 {
-	background-color: rgba(194, 194, 194, 1);
+	background-color: rgba(224, 224, 224, 1);
 }
 
 .ProjectBrowserBottomBarBg
 {
-	background-color: rgba(194, 194, 194, 1);
+	background-color: rgba(224, 224, 224, 1);
 }
 
 .dockHeader
@@ -40,17 +40,17 @@
 
 .ToolbarDropDownToogleRight
 {
-	background-color: rgba(173, 173, 173, 1);
+	background-color: rgba(235, 235, 235, 1);
 }
 
 .ToolbarPopupLeft
 {
-	background-color: rgba(173, 173, 173, 1);
+	background-color: rgba(235, 235, 235, 1);
 }
 
 .ToolbarPopup
 {
-	background-color: rgba(173, 173, 173, 1);
+	background-color: rgba(235, 235, 235, 1);
 }
 
 .toolbarbutton
@@ -60,42 +60,42 @@
 
 .PreToolbar
 {
-	background-color: rgba(173, 173, 173, 1);
+	background-color: rgba(235, 235, 235, 1);
 }
 
 .AppToolbar
 {
-	background-color: rgba(173, 173, 173, 1);
+	background-color: rgba(235, 235, 235, 1);
 }
 
 .GameViewBackground
 {
-	background-color: rgba(173, 173, 173, 1);
+	background-color: rgba(235, 235, 235, 1);
 }
 
 .CN EntryInfoSmall
 {
-	background-color: rgba(173, 173, 173, 1);
+	background-color: rgba(235, 235, 235, 1);
 }
 
 .Toolbar
 {
-	background-color: rgba(173, 173, 173, 1);
+	background-color: rgba(235, 235, 235, 1);
 }
 
 .toolbarbutton
 {
-	background-color: rgba(173, 173, 173, 1);
+	background-color: rgba(235, 235, 235, 1);
 }
 
 .toolbarbuttonRight
 {
-	background-color: rgba(173, 173, 173, 1);
+	background-color: rgba(235, 235, 235, 1);
 }
 
 .ProjectBrowserIconAreaBg
 {
-	background-color: rgba(173, 173, 173, 1);
+	background-color: rgba(235, 235, 235, 1);
 }
 
 .dragtab-label
@@ -105,60 +105,60 @@
 
 .AppCommandLeft
 {
-	background-color: rgba(192, 192, 192, 1);
+	background-color: rgba(224, 224, 224, 1);
 }
 
 .AppCommandMid
 {
-	background-color: rgba(192, 192, 192, 1);
+	background-color: rgba(224, 224, 224, 1);
 }
 
 .AppCommand
 {
-	background-color: rgba(192, 192, 192, 1);
+	background-color: rgba(224, 224, 224, 1);
 }
 
 .AppToolbarButtonLeft
 {
-	background-color: rgba(192, 192, 192, 1);
+	background-color: rgba(224, 224, 224, 1);
 }
 
 .AppToolbarButtonRight
 {
-	background-color: rgba(192, 192, 192, 1);
+	background-color: rgba(224, 224, 224, 1);
 }
 
 .DropDown
 {
-	background-color: rgba(192, 192, 192, 1);
+	background-color: rgba(224, 224, 224, 1);
 }
 
 .SceneTopBarBg
 {
-	background-color: rgba(205, 205, 205, 1);
+	background-color: rgba(223, 223, 223, 1);
 }
 
 .MiniPopup
 {
-	background-color: rgba(237, 237, 237, 1);
+	background-color: rgba(223, 223, 223, 1);
 }
 
 .TV Selection
 {
-	background-color: rgba(237, 237, 237, 1);
+	background-color: rgba(223, 223, 223, 1);
 }
 
 .ExposablePopupMenu
 {
-	background-color: rgba(237, 237, 237, 1);
+	background-color: rgba(223, 223, 223, 1);
 }
 
 .minibutton
 {
-	background-color: rgba(237, 237, 237, 1);
+	background-color: rgba(223, 223, 223, 1);
 }
 
 . ToolbarSearchTextField
 {
-	background-color: rgba(237, 237, 237, 1);
+	background-color: rgba(223, 223, 223, 1);
 }

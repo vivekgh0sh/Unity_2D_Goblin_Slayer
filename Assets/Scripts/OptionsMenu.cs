@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Audio;
 using System.Collections.Generic;
-using System.Linq; // For Distinct and OrderBy in resolution setup
+using System.Linq;
 using TMPro;
 
 public class OptionsMenu : MonoBehaviour
@@ -14,323 +14,312 @@ public class OptionsMenu : MonoBehaviour
     public Slider musicVolumeSlider;
     public Slider sfxVolumeSlider;
 
-    // PlayerPrefs Keys
-    public const string MASTER_VOL_KEY = "MasterVolume_PlayerPref"; // Made pref keys more distinct
+    // --- Temporary storage for pending audio changes ---
+    private float _pendingMasterVolume;
+    private float _pendingMusicVolume;
+    private float _pendingSFXVolume;
+
+    public const string MASTER_VOL_KEY = "MasterVolume_PlayerPref";
     public const string MUSIC_VOL_KEY = "MusicVolume_PlayerPref";
     public const string SFX_VOL_KEY = "SFXVolume_PlayerPref";
+    public const string MASTER_MIXER_PARAM = "MasterVolume"; // Exposed parameter name in AudioMixer
+    public const string MUSIC_MIXER_PARAM = "MusicVolume";   // Exposed parameter name in AudioMixer
+    public const string SFX_MIXER_PARAM = "SFXVolume";     // Exposed parameter name in AudioMixer
 
     [Header("Graphics Settings")]
     public TMP_Dropdown resolutionDropdown;
     public Toggle fullscreenToggle;
+
+    // --- Temporary storage for pending graphics changes ---
+    private int _pendingResolutionIndex;
+    private bool _pendingIsFullscreen;
+
     public const string RESOLUTION_INDEX_KEY = "ResolutionIndex_PlayerPref";
     public const string FULLSCREEN_KEY = "IsFullscreen_PlayerPref";
 
     private Resolution[] _availableResolutions;
     private List<Resolution> _filteredResolutions;
-    private int _currentResolutionIndex = 0;
+    // Removed _currentResolutionIndex as pendingResolutionIndex will track UI choice
 
-    [Header("Panel Management (Optional)")]
+    [Header("Panel Management")]
     public GameObject optionsPanel;
     public GameObject mainMenuPanel;
 
+    [Header("Buttons")]
+    public Button applyButton; // Assign your "Apply" button here
+    // Back button will also trigger Apply or Revert
+
+    void Awake() // Changed to Awake to ensure pending values are set before Start might try to use them
+    {
+        _filteredResolutions = new List<Resolution>();
+        // Initialize pending values with current/loaded settings to avoid null issues
+        // LoadSettings will overwrite these if PlayerPrefs exist
+        _pendingMasterVolume = PlayerPrefs.GetFloat(MASTER_VOL_KEY, 0.75f);
+        _pendingMusicVolume = PlayerPrefs.GetFloat(MUSIC_VOL_KEY, 0.75f);
+        _pendingSFXVolume = PlayerPrefs.GetFloat(SFX_VOL_KEY, 0.75f);
+        _pendingIsFullscreen = PlayerPrefs.GetInt(FULLSCREEN_KEY, Screen.fullScreen ? 1 : 0) == 1;
+        // _pendingResolutionIndex will be set during SetupResolutionDropdown or LoadSettings
+    }
+
     void Start()
     {
-        _filteredResolutions = new List<Resolution>(); // Initialize the list
-
-        SetupVolumeSliders();
-        SetupResolutionDropdownAndToggle();
-        LoadSettings();
+        SetupEventlisteners();
+        SetupResolutionDropdown(); // Renamed from SetupResolutionDropdownAndToggle
+        LoadAndApplyInitialSettings(); // Loads and applies directly on start
     }
 
-    void SetupVolumeSliders()
+    void SetupEventlisteners()
     {
-        masterVolumeSlider?.onValueChanged.AddListener(SetMasterVolume);
-        musicVolumeSlider?.onValueChanged.AddListener(SetMusicVolume);
-        sfxVolumeSlider?.onValueChanged.AddListener(SetSFXVolume);
+        masterVolumeSlider?.onValueChanged.AddListener(OnMasterVolumeSliderChanged);
+        musicVolumeSlider?.onValueChanged.AddListener(OnMusicVolumeSliderChanged);
+        sfxVolumeSlider?.onValueChanged.AddListener(OnSFXVolumeSliderChanged);
+        resolutionDropdown?.onValueChanged.AddListener(OnResolutionDropdownChanged);
+        fullscreenToggle?.onValueChanged.AddListener(OnFullscreenToggleChanged);
+        applyButton?.onClick.AddListener(OnApplyButtonClicked);
     }
 
-    void SetupResolutionDropdownAndToggle()
+    void SetupResolutionDropdown()
     {
-        if (resolutionDropdown != null)
+        if (resolutionDropdown == null)
         {
-            _availableResolutions = Screen.resolutions;
-            resolutionDropdown.ClearOptions();
+            Debug.LogWarning("Resolution Dropdown not assigned.");
+            return;
+        }
 
-            // Filter for unique resolutions, prioritizing current refresh rate
-            double currentMonitorRefreshRate = Screen.currentResolution.refreshRateRatio.value;
+        _availableResolutions = Screen.resolutions;
+        resolutionDropdown.ClearOptions();
+        _filteredResolutions.Clear(); // Clear before repopulating
+
+        double currentMonitorRefreshRate = Screen.currentResolution.refreshRateRatio.value;
+        _filteredResolutions = _availableResolutions
+            .Where(res => System.Math.Abs(res.refreshRateRatio.value - currentMonitorRefreshRate) < 0.1 || currentMonitorRefreshRate == 0) // Also allow if current rate is 0 (editor default)
+            .GroupBy(res => new { res.width, res.height })
+            .Select(group => group.OrderByDescending(r => r.refreshRateRatio.value).First()) // Get highest refresh rate for that WxH
+            .OrderBy(res => res.width).ThenBy(res => res.height)
+            .ToList();
+
+        if (_filteredResolutions.Count == 0)
+        {
+            Debug.LogWarning("No resolutions matched current refresh rate. Falling back to all unique screen resolutions.");
             _filteredResolutions = _availableResolutions
-                .Where(res => System.Math.Abs(res.refreshRateRatio.value - currentMonitorRefreshRate) < 0.1) // Check current refresh rate
-                .GroupBy(res => new { res.width, res.height }) // Group by width and height to get unique dimensions
-                .Select(group => group.First()) // Select the first one (effectively distinct width/height at that rate)
-                .OrderBy(res => res.width).ThenBy(res => res.height) // Order them
+                .GroupBy(res => new { res.width, res.height, refreshRateValue = System.Math.Round(res.refreshRateRatio.value, 2) })
+                .Select(group => group.First())
+                .OrderBy(res => res.width).ThenBy(res => res.height).ThenBy(res => res.refreshRateRatio.value)
                 .ToList();
-
-            // Fallback if no resolutions matched current refresh rate (e.g. exclusive fullscreen mode reporting weirdly in editor)
-            if (_filteredResolutions.Count == 0)
-            {
-                Debug.LogWarning("No resolutions matched current refresh rate. Falling back to all unique screen resolutions.");
-                _filteredResolutions = _availableResolutions
-                    .GroupBy(res => new { res.width, res.height, refreshRateValue = System.Math.Round(res.refreshRateRatio.value, 2) }) // Group by w, h, and rounded refresh rate
-                    .Select(group => group.First())
-                    .OrderBy(res => res.width).ThenBy(res => res.height).ThenBy(res => res.refreshRateRatio.value)
-                    .ToList();
-            }
-
-
-            List<string> options = new List<string>();
-            _currentResolutionIndex = -1; // Default to not found
-
-            for (int i = 0; i < _filteredResolutions.Count; i++)
-            {
-                Resolution res = _filteredResolutions[i];
-                // Ensure refreshRateRatio is valid before trying to get its value
-                string refreshRateStr = "N/A";
-                if (res.refreshRateRatio.denominator != 0)
-                {
-                    refreshRateStr = $"{System.Math.Round(res.refreshRateRatio.value, 0)} Hz";
-                }
-                else if (res.refreshRate > 0)
-                { // Fallback for older Unity or specific platforms
-                    refreshRateStr = $"{res.refreshRate} Hz";
-                }
-
-                string option = $"{res.width} x {res.height} @ {refreshRateStr}";
-                options.Add(option);
-
-                if (res.width == Screen.width && res.height == Screen.height)
-                {
-                    // Check refresh rate match more carefully for current selection
-                    if (res.refreshRateRatio.denominator != 0 && Screen.currentResolution.refreshRateRatio.denominator != 0 &&
-                        System.Math.Abs(res.refreshRateRatio.value - Screen.currentResolution.refreshRateRatio.value) < 0.1)
-                    {
-                        _currentResolutionIndex = i;
-                    }
-                    else if (res.refreshRate > 0 && Screen.currentResolution.refreshRate > 0 &&
-                             res.refreshRate == Screen.currentResolution.refreshRate) // Fallback check
-                    {
-                        _currentResolutionIndex = i;
-                    }
-                }
-            }
-
-            // If current resolution was not perfectly matched, try to find a reasonable default
-            if (_currentResolutionIndex == -1 && _filteredResolutions.Count > 0)
-            {
-                // Attempt to find based on width and height alone if refresh rate caused mismatch
-                for (int i = 0; i < _filteredResolutions.Count; i++)
-                {
-                    if (_filteredResolutions[i].width == Screen.width && _filteredResolutions[i].height == Screen.height)
-                    {
-                        _currentResolutionIndex = i;
-                        break;
-                    }
-                }
-                // If still not found, default to the last (often highest) or first resolution in the sorted list
-                if (_currentResolutionIndex == -1)
-                {
-                    _currentResolutionIndex = _filteredResolutions.Count - 1;
-                }
-            }
-
-
-            resolutionDropdown.AddOptions(options);
-            if (_currentResolutionIndex != -1 && _currentResolutionIndex < resolutionDropdown.options.Count)
-            {
-                resolutionDropdown.value = _currentResolutionIndex;
-            }
-            resolutionDropdown.RefreshShownValue();
-            resolutionDropdown.onValueChanged.AddListener(SetResolutionFromDropdown);
         }
-        else
+
+        List<string> options = new List<string>();
+        int activeResolutionIndex = -1;
+
+        for (int i = 0; i < _filteredResolutions.Count; i++)
         {
-            Debug.LogWarning("Resolution Dropdown not assigned in OptionsMenu.");
+            Resolution res = _filteredResolutions[i];
+            string refreshRateStr = (res.refreshRateRatio.denominator != 0) ?
+                                    $"{System.Math.Round(res.refreshRateRatio.value, 0)} Hz" :
+                                    (res.refreshRate > 0 ? $"{res.refreshRate} Hz" : "N/A");
+            options.Add($"{res.width} x {res.height} @ {refreshRateStr}");
+
+            if (res.width == Screen.width && res.height == Screen.height &&
+                (res.refreshRateRatio.denominator == 0 || Screen.currentResolution.refreshRateRatio.denominator == 0 || // Handle cases where ratio might be 0/0
+                 System.Math.Abs(res.refreshRateRatio.value - Screen.currentResolution.refreshRateRatio.value) < 0.1))
+            {
+                activeResolutionIndex = i;
+            }
         }
 
-        if (fullscreenToggle != null)
+        if (activeResolutionIndex == -1 && _filteredResolutions.Count > 0) // Fallback if exact match not found
         {
-            fullscreenToggle.isOn = Screen.fullScreen; // Or use Screen.fullScreenMode for more precise state
-            fullscreenToggle.onValueChanged.AddListener(SetFullscreen);
+            activeResolutionIndex = _filteredResolutions.Count - 1; // Default to highest available
+            for (int i = 0; i < _filteredResolutions.Count; ++i)
+            { // Or try to match width/height at least
+                if (_filteredResolutions[i].width == Screen.width && _filteredResolutions[i].height == Screen.height)
+                {
+                    activeResolutionIndex = i;
+                    break;
+                }
+            }
         }
-        else
+
+        resolutionDropdown.AddOptions(options);
+        if (activeResolutionIndex != -1 && activeResolutionIndex < resolutionDropdown.options.Count)
         {
-            Debug.LogWarning("Fullscreen Toggle not assigned in OptionsMenu.");
+            resolutionDropdown.value = activeResolutionIndex;
+            _pendingResolutionIndex = activeResolutionIndex; // Initialize pending with current
         }
+        resolutionDropdown.RefreshShownValue();
     }
 
-    public void SetMasterVolume(float volume)
+    // --- UI Event Handlers (Update PENDING values) ---
+    public void OnMasterVolumeSliderChanged(float volume)
+    {
+        _pendingMasterVolume = volume;
+        // Optional: Preview sound if desired, but don't save or apply to mixer yet
+        // PreviewMasterVolume(_pendingMasterVolume);
+    }
+    public void OnMusicVolumeSliderChanged(float volume)
+    {
+        _pendingMusicVolume = volume;
+    }
+    public void OnSFXVolumeSliderChanged(float volume)
+    {
+        _pendingSFXVolume = volume;
+    }
+    public void OnResolutionDropdownChanged(int resolutionIndex)
+    {
+        _pendingResolutionIndex = resolutionIndex;
+    }
+    public void OnFullscreenToggleChanged(bool isFullscreen)
+    {
+        _pendingIsFullscreen = isFullscreen;
+    }
+
+    // --- Apply Methods (Called by Apply Button or on Panel Close) ---
+    private void ApplyAudioSettings()
     {
         if (mainMixer == null) return;
-        string paramName = "MasterVolume"; // Explicitly define here
-        Debug.Log($"Attempting to set Mixer Parameter: '{paramName}' with linear volume: {volume}");
-        mainMixer.SetFloat(paramName, Mathf.Log10(Mathf.Max(volume, 0.0001f)) * 20);
-        PlayerPrefs.SetFloat(MASTER_VOL_KEY, volume);
-        // Log current values of other params for comparison
-        float musicMixerVol, sfxMixerVol;
-        mainMixer.GetFloat("MusicVolume", out musicMixerVol);
-        mainMixer.GetFloat("SFXVolume", out sfxMixerVol);
-        Debug.Log($"After setting Master: MusicMixerVol_dB={musicMixerVol}, SFXMixerVol_dB={sfxMixerVol}");
+        Debug.Log($"Applying Audio - Master: {_pendingMasterVolume}, Music: {_pendingMusicVolume}, SFX: {_pendingSFXVolume}");
+
+        mainMixer.SetFloat(MASTER_MIXER_PARAM, LinearToDecibels(_pendingMasterVolume));
+        PlayerPrefs.SetFloat(MASTER_VOL_KEY, _pendingMasterVolume);
+
+        mainMixer.SetFloat(MUSIC_MIXER_PARAM, LinearToDecibels(_pendingMusicVolume));
+        PlayerPrefs.SetFloat(MUSIC_VOL_KEY, _pendingMusicVolume);
+
+        mainMixer.SetFloat(SFX_MIXER_PARAM, LinearToDecibels(_pendingSFXVolume));
+        PlayerPrefs.SetFloat(SFX_VOL_KEY, _pendingSFXVolume);
     }
 
-    public void SetMusicVolume(float volume)
+    private void ApplyGraphicsSettingsInternal() // Renamed to avoid confusion with public ApplyGraphicsSettings
     {
-        if (mainMixer == null) return;
-        string paramName = "MusicVolume"; // Explicitly define here
-        Debug.Log($"Attempting to set Mixer Parameter: '{paramName}' with linear volume: {volume}");
-        mainMixer.SetFloat(paramName, Mathf.Log10(Mathf.Max(volume, 0.0001f)) * 20);
-        PlayerPrefs.SetFloat(MUSIC_VOL_KEY, volume);
-        // Log current values of other params for comparison
-        float masterMixerVol, sfxMixerVol;
-        mainMixer.GetFloat("MasterVolume", out masterMixerVol);
-        mainMixer.GetFloat("SFXVolume", out sfxMixerVol);
-        Debug.Log($"After setting Music: MasterMixerVol_dB={masterMixerVol}, SFXMixerVol_dB={sfxMixerVol}");
-    }
-
-    public void SetSFXVolume(float volume)
-    {
-        if (mainMixer == null) return;
-        string paramName = "SFXVolume"; // Explicitly define here
-        Debug.Log($"Attempting to set Mixer Parameter: '{paramName}' with linear volume: {volume}");
-        mainMixer.SetFloat(paramName, Mathf.Log10(Mathf.Max(volume, 0.0001f)) * 20);
-        PlayerPrefs.SetFloat(SFX_VOL_KEY, volume);
-        // Log current values of other params for comparison
-        float masterMixerVol, musicMixerVol;
-        mainMixer.GetFloat("MasterVolume", out masterMixerVol);
-        mainMixer.GetFloat("MusicVolume", out musicMixerVol);
-        Debug.Log($"After setting SFX: MasterMixerVol_dB={masterMixerVol}, MusicMixerVol_dB={musicMixerVol}");
-    }
-
-    public void SetResolutionFromDropdown(int resolutionIndex)
-    {
-        if (_filteredResolutions == null || resolutionIndex < 0 || resolutionIndex >= _filteredResolutions.Count) return;
-        _currentResolutionIndex = resolutionIndex;
-        // Resolution will be applied via ApplyGraphicsSettings button
-    }
-
-    public void SetFullscreen(bool isFullscreen)
-    {
-        // This directly changes the mode. ApplySelectedResolution will use this state if called.
-        Screen.fullScreenMode = isFullscreen ? FullScreenMode.ExclusiveFullScreen : FullScreenMode.Windowed;
-        // Consider FullScreenMode.FullScreenWindow for borderless option
-        PlayerPrefs.SetInt(FULLSCREEN_KEY, isFullscreen ? 1 : 0);
-        Debug.Log($"Fullscreen mode set to: {Screen.fullScreenMode}");
-    }
-
-    public void ApplyGraphicsSettings()
-    {
-        ApplySelectedResolution();
-        Debug.Log("Graphics settings applied!");
-    }
-
-    private void ApplySelectedResolution()
-    {
-        if (_filteredResolutions == null || _currentResolutionIndex < 0 || _currentResolutionIndex >= _filteredResolutions.Count)
+        if (_filteredResolutions == null || _pendingResolutionIndex < 0 || _pendingResolutionIndex >= _filteredResolutions.Count)
         {
             Debug.LogWarning("Cannot apply resolution: No valid resolution selected or available.");
             return;
         }
 
-        Resolution resolution = _filteredResolutions[_currentResolutionIndex];
-        FullScreenMode desiredFullScreenMode = fullscreenToggle?.isOn ?? Screen.fullScreen ?
-                                               FullScreenMode.ExclusiveFullScreen : FullScreenMode.Windowed;
-        // Alternative for borderless:
-        // FullScreenMode desiredFullScreenMode = fullscreenToggle?.isOn ?? Screen.fullScreen ?
-        //                                       FullScreenMode.FullScreenWindow : FullScreenMode.Windowed;
+        Resolution resolution = _filteredResolutions[_pendingResolutionIndex];
+        FullScreenMode desiredFullScreenMode = _pendingIsFullscreen ? FullScreenMode.ExclusiveFullScreen : FullScreenMode.Windowed;
+        // Consider: FullScreenMode.FullScreenWindow for borderless
 
         RefreshRate refreshRateStruct = new RefreshRate
         {
             numerator = (uint)resolution.refreshRateRatio.numerator,
             denominator = (uint)resolution.refreshRateRatio.denominator
         };
-
-        // Fallback for refresh rate if numerator/denominator is zero (can happen with Screen.resolutions)
-        if (refreshRateStruct.numerator == 0 || refreshRateStruct.denominator == 0)
+        if (refreshRateStruct.numerator == 0 || refreshRateStruct.denominator == 0) // Fallback
         {
-            Debug.LogWarning($"Resolution {resolution.width}x{resolution.height} had invalid refreshRateRatio num/den ({resolution.refreshRateRatio.numerator}/{resolution.refreshRateRatio.denominator}). Using current screen's rate or default.");
-            if (Screen.currentResolution.refreshRateRatio.denominator != 0)
-            {
-                refreshRateStruct.numerator = (uint)Screen.currentResolution.refreshRateRatio.numerator;
-                refreshRateStruct.denominator = (uint)Screen.currentResolution.refreshRateRatio.denominator;
-            }
-            else
-            { // Absolute fallback
-                refreshRateStruct.numerator = 60; refreshRateStruct.denominator = 1;
-            }
+            refreshRateStruct = Screen.currentResolution.refreshRateRatio.denominator != 0 ? Screen.currentResolution.refreshRateRatio : new RefreshRate { numerator = 60, denominator = 1 };
         }
-
 
         Screen.SetResolution(resolution.width, resolution.height, desiredFullScreenMode, refreshRateStruct);
-        PlayerPrefs.SetInt(RESOLUTION_INDEX_KEY, _currentResolutionIndex);
-        // Fullscreen PlayerPref is saved in SetFullscreen method
-        Debug.Log($"Resolution applied: {resolution.width}x{resolution.height} @ {System.Math.Round(refreshRateStruct.value, 0)}Hz, Mode: {desiredFullScreenMode}");
+        PlayerPrefs.SetInt(RESOLUTION_INDEX_KEY, _pendingResolutionIndex);
+        PlayerPrefs.SetInt(FULLSCREEN_KEY, _pendingIsFullscreen ? 1 : 0);
+        Debug.Log($"Graphics Applied: {resolution.width}x{resolution.height} @ {System.Math.Round(refreshRateStruct.value, 0)}Hz, Mode: {desiredFullScreenMode}");
     }
 
-    public void LoadSettings()
+    // --- Button Click Handler ---
+    public void OnApplyButtonClicked()
     {
-        // Load Volume
-        float masterVol = PlayerPrefs.GetFloat(MASTER_VOL_KEY, 0.75f);
-        if (masterVolumeSlider != null) masterVolumeSlider.value = masterVol;
-        SetMasterVolume(masterVol); // Apply to mixer
+        Debug.Log("Apply Button Clicked");
+        ApplyAudioSettings();
+        ApplyGraphicsSettingsInternal();
+        PlayerPrefs.Save(); // Explicitly save all player prefs
+    }
 
-        float musicVol = PlayerPrefs.GetFloat(MUSIC_VOL_KEY, 0.75f);
-        if (musicVolumeSlider != null) musicVolumeSlider.value = musicVol;
-        SetMusicVolume(musicVol); // Apply to mixer
-
-        float sfxVol = PlayerPrefs.GetFloat(SFX_VOL_KEY, 0.75f);
-        if (sfxVolumeSlider != null) sfxVolumeSlider.value = sfxVol;
-        SetSFXVolume(sfxVol); // Apply to mixer
+    // --- Load Settings ---
+    public void LoadAndApplyInitialSettings() // Called once on Start
+    {
+        // Load Audio
+        _pendingMasterVolume = PlayerPrefs.GetFloat(MASTER_VOL_KEY, 0.75f);
+        _pendingMusicVolume = PlayerPrefs.GetFloat(MUSIC_VOL_KEY, 0.75f);
+        _pendingSFXVolume = PlayerPrefs.GetFloat(SFX_VOL_KEY, 0.75f);
+        ApplyAudioSettings(); // Apply directly to mixer on game start
 
         // Load Graphics
-        bool isFullscreen = PlayerPrefs.GetInt(FULLSCREEN_KEY, Screen.fullScreen ? 1 : 0) == 1;
-        if (fullscreenToggle != null)
-        {
-            fullscreenToggle.isOn = isFullscreen;
-        }
-        // Apply fullscreen state from prefs when loading, independent of Apply button for this part
-        Screen.fullScreenMode = isFullscreen ? FullScreenMode.ExclusiveFullScreen : FullScreenMode.Windowed;
+        _pendingIsFullscreen = PlayerPrefs.GetInt(FULLSCREEN_KEY, Screen.fullScreen ? 1 : 0) == 1;
+        // Screen.fullScreenMode is set directly by ApplyGraphicsSettingsInternal
 
-
-        // Resolution - Setup dropdown first, then load saved index
-        // Note: SetupResolutionDropdownAndToggle() is called in Start() before LoadSettings().
-        // It populates _filteredResolutions and sets an initial _currentResolutionIndex.
         if (resolutionDropdown != null && _filteredResolutions != null && _filteredResolutions.Count > 0)
         {
-            int savedResolutionIndex = PlayerPrefs.GetInt(RESOLUTION_INDEX_KEY, -1);
-
-            if (savedResolutionIndex >= 0 && savedResolutionIndex < _filteredResolutions.Count)
-            {
-                _currentResolutionIndex = savedResolutionIndex; // Use saved index if valid
+            _pendingResolutionIndex = PlayerPrefs.GetInt(RESOLUTION_INDEX_KEY, resolutionDropdown.value); // Default to current dropdown value if no pref
+            if (_pendingResolutionIndex < 0 || _pendingResolutionIndex >= _filteredResolutions.Count)
+            { // Ensure index is valid
+                _pendingResolutionIndex = resolutionDropdown.options.Count > 0 ? resolutionDropdown.options.Count - 1 : 0;
             }
-            // else _currentResolutionIndex remains what SetupResolutionDropdownAndToggle determined (current screen res)
-
-            resolutionDropdown.value = _currentResolutionIndex;
-            resolutionDropdown.RefreshShownValue();
-
-            // DO NOT call ApplySelectedResolution() here automatically on load
-            // unless you want resolution to change without hitting "Apply".
-            // The visual dropdown will reflect the setting, user clicks "Apply" to enact it.
         }
-        Debug.Log("Settings Loaded. MasterVol, MusicVol, SFXVol applied to mixer. Graphics UI updated.");
+        ApplyGraphicsSettingsInternal(); // Apply directly on game start
+
+        // Update UI elements to reflect these initially applied settings
+        UpdateUIToMatchPendingSettings();
+        Debug.Log("Initial settings loaded and applied.");
     }
 
-    // --- Panel Management Example ---
+    private void LoadSettingsForUIRefresh() // Called when options panel opens
+    {
+        // Load values from PlayerPrefs into PENDING variables
+        _pendingMasterVolume = PlayerPrefs.GetFloat(MASTER_VOL_KEY, 0.75f);
+        _pendingMusicVolume = PlayerPrefs.GetFloat(MUSIC_VOL_KEY, 0.75f);
+        _pendingSFXVolume = PlayerPrefs.GetFloat(SFX_VOL_KEY, 0.75f);
+        _pendingIsFullscreen = PlayerPrefs.GetInt(FULLSCREEN_KEY, Screen.fullScreen ? 1 : 0) == 1;
+
+        if (resolutionDropdown != null && _filteredResolutions != null && _filteredResolutions.Count > 0)
+        {
+            _pendingResolutionIndex = PlayerPrefs.GetInt(RESOLUTION_INDEX_KEY, resolutionDropdown.value);
+            if (_pendingResolutionIndex < 0 || _pendingResolutionIndex >= _filteredResolutions.Count)
+            {
+                _pendingResolutionIndex = resolutionDropdown.options.Count > 0 ? resolutionDropdown.options.Count - 1 : 0;
+            }
+        }
+        UpdateUIToMatchPendingSettings(); // Update UI to show these loaded values
+    }
+
+
+    private void UpdateUIToMatchPendingSettings()
+    {
+        if (masterVolumeSlider != null) masterVolumeSlider.value = _pendingMasterVolume;
+        if (musicVolumeSlider != null) musicVolumeSlider.value = _pendingMusicVolume;
+        if (sfxVolumeSlider != null) sfxVolumeSlider.value = _pendingSFXVolume;
+        if (fullscreenToggle != null) fullscreenToggle.isOn = _pendingIsFullscreen;
+        if (resolutionDropdown != null && _pendingResolutionIndex >= 0 && _pendingResolutionIndex < resolutionDropdown.options.Count)
+        {
+            resolutionDropdown.value = _pendingResolutionIndex;
+            resolutionDropdown.RefreshShownValue();
+        }
+    }
+
+
+    // --- Panel Management ---
     public void ToggleOptionsPanel()
     {
-        bool isPanelAlreadyActive = optionsPanel != null && optionsPanel.activeSelf;
-        bool shouldShowOptions = !isPanelAlreadyActive;
-
+        bool shouldShowOptions = optionsPanel != null && !optionsPanel.activeSelf;
         optionsPanel?.SetActive(shouldShowOptions);
         mainMenuPanel?.SetActive(!shouldShowOptions);
 
         if (shouldShowOptions)
         {
-            LoadSettings(); // Refresh UI values from PlayerPrefs when showing the panel
+            LoadSettingsForUIRefresh(); // Load current settings and update UI elements
         }
     }
 
-    public void CloseOptionsPanel()
+    public void CloseOptionsPanelAndApply() // Hook this to your "Back" button in options
     {
+        OnApplyButtonClicked(); // Apply settings when closing
         optionsPanel?.SetActive(false);
         mainMenuPanel?.SetActive(true);
-        // PlayerPrefs.Save(); // Not strictly necessary as SetFloat/SetInt save immediately.
+    }
+    public void CloseOptionsPanelAndRevert() // Alternative for a "Cancel" or "Back without Saving"
+    {
+        // Don't apply pending changes. Reload settings from PlayerPrefs to revert UI.
+        LoadSettingsForUIRefresh();
+        optionsPanel?.SetActive(false);
+        mainMenuPanel?.SetActive(true);
+    }
+
+
+    // --- Utility ---
+    private float LinearToDecibels(float linear)
+    {
+        // Ensure linear is not zero or negative for Log10
+        return Mathf.Log10(Mathf.Max(linear, 0.0001f)) * 20f;
     }
 }
