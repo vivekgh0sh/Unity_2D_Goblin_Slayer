@@ -137,7 +137,7 @@ MonoBehaviour:
   healthBarPrefab: {fileID: 1429420136992199243, guid: 2ccb075bb98d9dd4b8002421795c0391, type: 3}
   healthBarOffset: {x: 0, y: 1, z: 0}
   Target: {fileID: 3264769247819381562}
-  AttackTarget: {fileID: 0}
+  AttackTarget: {fileID: 6609995282689691476, guid: 4f398122dd9bfeb4eb75dbbacfc795e7, type: 3}
 --- !u!212 &579290580693202213
 SpriteRenderer:
   m_ObjectHideFlags: 0
