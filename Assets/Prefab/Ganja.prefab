@@ -106,24 +106,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 5
-  currentHealth: 0
   moveSpeed: 2
   attackDamage: 1
   attackRange: 1.5
   attackCooldown: 0
-  detectionRange: 3.4
-  loseSightRange: 3.4
-  playerTransform: {fileID: 6609995282689691476, guid: 4f398122dd9bfeb4eb75dbbacfc795e7, type: 3}
+  detectionRange: 5
+  loseSightRange: 5
+  playerTransform: {fileID: 0}
   playerLayer:
     serializedVersion: 2
     m_Bits: 64
   attackPoint: {fileID: 3985746122327783682}
-  attackHitboxSize: 0.93
+  attackHitboxSize: 1
   healthBarPrefab: {fileID: 1429420136992199243, guid: 2ccb075bb98d9dd4b8002421795c0391, type: 3}
   healthBarOffset: {x: 0, y: 1.2, z: 0}
   attackSfx: {fileID: 8300000, guid: 1fbb12fed5a07974ab89bc56d616b44d, type: 3}
   takeHitSfx: {fileID: 8300000, guid: 3135b98e075af6a4da44f84e579e9e33, type: 3}
   deathSfx: {fileID: 8300000, guid: 58ffe0a3c2804a547aabd7ccce282d0e, type: 3}
+  footstepSfx: []
 --- !u!95 &5466445614283839279
 Animator:
   serializedVersion: 7
