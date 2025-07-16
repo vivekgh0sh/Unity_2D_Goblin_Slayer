@@ -52,6 +52,8 @@ public class Player : MonoBehaviour
     public bool _IsDeath { get; private set; }
     private Vector3 _initialStartPosition;
 
+    private bool _isBeingKnockedBack = false;
+
     // Animator Hashes
     private int RunHash = Animator.StringToHash("IsRunning");
     private int IsGroundedHash = Animator.StringToHash("IsGrounded");
@@ -105,7 +107,7 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        if (_IsDeath) return;
+        if (_IsDeath || _isBeingKnockedBack) return;
 
         HandleMovementInput();
         HandleJumpAndFall();
@@ -117,7 +119,7 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!_IsDeath)
+        if (!_IsDeath && !_isBeingKnockedBack)
         {
             ApplyMovement();
             FlipX();
@@ -405,8 +407,34 @@ public class Player : MonoBehaviour
         PlaySound(checkpointReachedSfx);
     }
 
-    // Mark as Obsolete if you plan to replace this system later
-    // [System.Obsolete("Consider a more robust death/respawn manager.")]
+    // <<< NEW PUBLIC METHOD FOR ENEMIES TO CALL >>>
+    public void ApplyKnockback(Vector2 direction, float force, float duration)
+    {
+        // Don't apply knockback if already in a knockback state or dead
+        if (_isBeingKnockedBack || _IsDeath)
+        {
+            return;
+        }
+        StartCoroutine(KnockbackCoroutine(direction, force, duration));
+    }
+
+    // <<< NEW COROUTINE TO HANDLE KNOCKBACK STATE >>>
+    private IEnumerator KnockbackCoroutine(Vector2 direction, float force, float duration)
+    {
+        _isBeingKnockedBack = true;
+
+        // Stop player's current momentum before applying new force
+        _R2D.linearVelocity = Vector2.zero;
+
+        // Apply the knockback force as a single impulse
+        _R2D.AddForce(direction * force, ForceMode2D.Impulse);
+
+        // Wait for the duration of the knockback stun
+        yield return new WaitForSeconds(duration);
+
+        // After knockback duration, restore control to the player
+        _isBeingKnockedBack = false;
+    }
     public void Die()
     {
         if (_IsDeath) return;

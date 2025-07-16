@@ -14,6 +14,12 @@ public class ganja : MonoBehaviour
     public float detectionRange = 8f;
     public float loseSightRange = 12f;
 
+    // <<< NEW KNOCKBACK STATS >>>
+    [Tooltip("How hard the player is pushed back on hit.")]
+    public float attackKnockbackForce = 15f;
+    [Tooltip("How long the player is stunned during knockback (in seconds).")]
+    public float knockbackDuration = 0.2f;
+
     [Header("References")]
     public Transform playerTransform;
     public LayerMask playerLayer;
@@ -184,6 +190,16 @@ public class ganja : MonoBehaviour
             if (playerCollider.TryGetComponent<Player>(out Player player) && !player._IsDeath)
             {
                 player.TakePlayerDamage(attackDamage);
+                // --- APPLY KNOCKBACK ---
+                // Calculate direction from enemy to player
+                Vector2 knockbackDirection = (player.transform.position - transform.position).normalized;
+
+                // Add a slight upward push to make it feel better (optional)
+                knockbackDirection.y += 0.1f;
+
+                // Call the new method on the Player script
+                player.ApplyKnockback(knockbackDirection, attackKnockbackForce, knockbackDuration);
+                // --- END KNOCKBACK ---
                 break;
             }
         }

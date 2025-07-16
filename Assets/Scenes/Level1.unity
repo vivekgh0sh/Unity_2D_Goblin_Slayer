@@ -193106,7 +193106,7 @@ Transform:
   m_GameObject: {fileID: 892317131}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.15, y: 0, z: 0}
+  m_LocalPosition: {x: 1.709, y: 0.07, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -195730,18 +195730,6 @@ PrefabInstance:
     - target: {fileID: 1984421749493785056, guid: 9d2a3c65b33fe1640b11bd4bf39a3a62, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2361665487299643942, guid: 9d2a3c65b33fe1640b11bd4bf39a3a62, type: 3}
-      propertyPath: currentHealth
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2361665487299643942, guid: 9d2a3c65b33fe1640b11bd4bf39a3a62, type: 3}
-      propertyPath: attackCooldown
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2361665487299643942, guid: 9d2a3c65b33fe1640b11bd4bf39a3a62, type: 3}
-      propertyPath: loseSightRange
-      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
