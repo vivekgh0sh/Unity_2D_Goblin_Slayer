@@ -190,16 +190,21 @@ public class ganja : MonoBehaviour
             if (playerCollider.TryGetComponent<Player>(out Player player) && !player._IsDeath)
             {
                 player.TakePlayerDamage(attackDamage);
-                // --- APPLY KNOCKBACK ---
-                // Calculate direction from enemy to player
-                Vector2 knockbackDirection = (player.transform.position - transform.position).normalized;
+                // --- REVISED KNOCKBACK LOGIC ---
+                // 1. Determine horizontal direction
+                float horizontalDirection = Mathf.Sign(player.transform.position.x - transform.position.x);
+                if (horizontalDirection == 0) // Fallback if perfectly aligned
+                {
+                    horizontalDirection = transform.localScale.x > 0 ? 1 : -1;
+                }
 
-                // Add a slight upward push to make it feel better (optional)
-                knockbackDirection.y += 0.1f;
+                // 2. Create a consistent knockback direction vector (e.g., 45-degree angle)
+                Vector2 knockbackDirection = new Vector2(horizontalDirection, 1.0f).normalized;
+                // For a more horizontal knockback, change the Y value: new Vector2(horizontalDirection, 0.5f).normalized
 
-                // Call the new method on the Player script
+                // 3. Call the ApplyKnockback method on the Player script
                 player.ApplyKnockback(knockbackDirection, attackKnockbackForce, knockbackDuration);
-                // --- END KNOCKBACK ---
+                // --- END REVISED KNOCKBACK LOGIC ---
                 break;
             }
         }
