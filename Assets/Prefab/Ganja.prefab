@@ -112,8 +112,8 @@ MonoBehaviour:
   attackCooldown: 1
   detectionRange: 5
   loseSightRange: 7
-  attackKnockbackForce: 150
-  knockbackDuration: 0.5
+  attackKnockbackForce: 50
+  knockbackDuration: 0.75
   playerTransform: {fileID: 0}
   playerLayer:
     serializedVersion: 2
