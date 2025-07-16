@@ -108,10 +108,10 @@ MonoBehaviour:
   maxHealth: 5
   moveSpeed: 2
   attackDamage: 1
-  attackRange: 1.5
-  attackCooldown: 0
+  attackRange: 1.95
+  attackCooldown: 1
   detectionRange: 5
-  loseSightRange: 5
+  loseSightRange: 7
   playerTransform: {fileID: 0}
   playerLayer:
     serializedVersion: 2
