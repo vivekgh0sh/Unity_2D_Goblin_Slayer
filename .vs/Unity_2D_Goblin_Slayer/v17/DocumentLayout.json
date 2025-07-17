@@ -3,12 +3,12 @@
   "WorkspaceRootPath": "D:\\vivekgh0sh\\Unity_2D_Goblin_Slayer\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{07507546-A899-BCAB-05F2-1038B679D430}|Assembly-CSharp.csproj|d:\\vivekgh0sh\\unity_2d_goblin_slayer\\assets\\scripts\\enemy\\ganja.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{07507546-A899-BCAB-05F2-1038B679D430}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\enemy\\ganja.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{07507546-A899-BCAB-05F2-1038B679D430}|Assembly-CSharp.csproj|D:\\vivekgh0sh\\Unity_2D_Goblin_Slayer\\assets\\scripts\\player\\player.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{07507546-A899-BCAB-05F2-1038B679D430}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\player\\player.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{07507546-A899-BCAB-05F2-1038B679D430}|Assembly-CSharp.csproj|d:\\vivekgh0sh\\unity_2d_goblin_slayer\\assets\\scripts\\enemy\\ganja.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{07507546-A899-BCAB-05F2-1038B679D430}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\enemy\\ganja.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{07507546-A899-BCAB-05F2-1038B679D430}|Assembly-CSharp.csproj|D:\\vivekgh0sh\\Unity_2D_Goblin_Slayer\\assets\\scripts\\enemy\\goblin\\enemy.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -22,30 +22,30 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "Player.cs",
               "DocumentMoniker": "D:\\vivekgh0sh\\Unity_2D_Goblin_Slayer\\Assets\\Scripts\\Player\\Player.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\Player\\Player.cs",
               "ToolTip": "D:\\vivekgh0sh\\Unity_2D_Goblin_Slayer\\Assets\\Scripts\\Player\\Player.cs",
               "RelativeToolTip": "Assets\\Scripts\\Player\\Player.cs",
-              "ViewState": "AgIAAIwBAAAAAAAAAAAcwLABAAAxAAAAAAAAAA==",
+              "ViewState": "AgIAALABAAAAAAAAAAAIwMkBAAAeAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-07-16T07:10:56.381Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "ganja.cs",
               "DocumentMoniker": "D:\\vivekgh0sh\\Unity_2D_Goblin_Slayer\\Assets\\Scripts\\enemy\\ganja.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\enemy\\ganja.cs",
               "ToolTip": "D:\\vivekgh0sh\\Unity_2D_Goblin_Slayer\\Assets\\Scripts\\enemy\\ganja.cs",
               "RelativeToolTip": "Assets\\Scripts\\enemy\\ganja.cs",
-              "ViewState": "AgIAAKcAAAAAAAAAAAAuwLIAAAA0AAAAAAAAAA==",
+              "ViewState": "AgIAALkAAAAAAAAAAAAowMIAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-07-14T09:11:19.486Z",
               "EditorCaption": ""

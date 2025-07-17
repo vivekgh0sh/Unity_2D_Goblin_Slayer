@@ -1,7 +1,8 @@
 // ganja.cs (Corrected)
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 
 public class ganja : MonoBehaviour
 {
@@ -16,7 +17,7 @@ public class ganja : MonoBehaviour
 
     // <<< NEW KNOCKBACK STATS >>>
     [Tooltip("How hard the player is pushed back on hit.")]
-    public float attackKnockbackForce = 15f;
+    public float attackKnockbackSpeed = 10f; // Renamed from attackKnockbackForce
     [Tooltip("How long the player is stunned during knockback (in seconds).")]
     public float knockbackDuration = 0.2f;
 
@@ -175,37 +176,45 @@ public class ganja : MonoBehaviour
         _lastAttackTime = Time.time;
         if (_animator != null) _animator.SetTrigger(AttackTriggerHash);
         PlaySound(attackSfx);
-        yield return new WaitForSeconds(0.3f);
-        if (_isAttacking && !_isDead && !_isTakingHit) DealDamageToPlayer();
+        // --- NEW: Create a list to track who has been hit by THIS swing ---
+        List<Collider2D> hitCollidersThisSwing = new List<Collider2D>();
+        // --- END NEW ---
+        yield return new WaitForSeconds(0.8f);
+        // Apply damage and knockback if the attack wasn't interrupted
+        if (_isAttacking && !_isDead && !_isTakingHit)
+        {
+            // Pass the list to the damage dealing method
+            DealDamageToPlayer(hitCollidersThisSwing); // <<< MODIFIED
+        }
         yield return new WaitForSeconds(0.4f);
         _isAttacking = false;
         _attackCoroutine = null;
     }
 
-    void DealDamageToPlayer()
+    void DealDamageToPlayer(List<Collider2D> alreadyHitColliders)
     {
         if (attackPoint == null) return;
         foreach (Collider2D playerCollider in Physics2D.OverlapCircleAll(attackPoint.position, attackHitboxSize, playerLayer))
         {
+            if (alreadyHitColliders.Contains(playerCollider))
+            {
+                continue;
+            }
+
             if (playerCollider.TryGetComponent<Player>(out Player player) && !player._IsDeath)
             {
+                alreadyHitColliders.Add(playerCollider);
                 player.TakePlayerDamage(attackDamage);
-                // --- REVISED KNOCKBACK LOGIC ---
-                // 1. Determine horizontal direction
+
                 float horizontalDirection = Mathf.Sign(player.transform.position.x - transform.position.x);
-                if (horizontalDirection == 0) // Fallback if perfectly aligned
+                if (horizontalDirection == 0)
                 {
-                    horizontalDirection = transform.localScale.x > 0 ? 1 : -1;
+                    horizontalDirection = (transform.localScale.x > 0) ? 1 : -1;
                 }
+                Vector2 knockbackDirection = new Vector2(horizontalDirection, 0f).normalized;
 
-                // 2. Create a consistent knockback direction vector (e.g., 45-degree angle)
-                Vector2 knockbackDirection = new Vector2(horizontalDirection, 1.0f).normalized;
-                // For a more horizontal knockback, change the Y value: new Vector2(horizontalDirection, 0.5f).normalized
-
-                // 3. Call the ApplyKnockback method on the Player script
-                player.ApplyKnockback(knockbackDirection, attackKnockbackForce, knockbackDuration);
-                // --- END REVISED KNOCKBACK LOGIC ---
-                break;
+                // --- USE THE NEW VARIABLE NAME ---
+                player.ApplyKnockback(knockbackDirection, attackKnockbackSpeed, knockbackDuration);
             }
         }
     }

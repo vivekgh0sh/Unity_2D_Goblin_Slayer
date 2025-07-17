@@ -107,7 +107,14 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        if (_IsDeath || _isBeingKnockedBack) return;
+        if (_IsDeath || _isBeingKnockedBack)
+        {
+            // --- NEW: Force horizontal input to zero while knockback is active ---
+            // This prevents the player from "fighting" the knockback by holding a direction.
+            _Horizontal = 0;
+            // --- END NEW ---
+            return;
+        }
 
         HandleMovementInput();
         HandleJumpAndFall();
@@ -406,34 +413,59 @@ public class Player : MonoBehaviour
     {
         PlaySound(checkpointReachedSfx);
     }
-
-    // <<< NEW PUBLIC METHOD FOR ENEMIES TO CALL >>>
-    public void ApplyKnockback(Vector2 direction, float force, float duration)
+    [ContextMenu("TEST KNOCKBACK TO THE RIGHT")]
+    public void TestKnockbackRight()
     {
-        // Don't apply knockback if already in a knockback state or dead
+        // We will call ApplyKnockback with hardcoded test values
+        ApplyKnockback(Vector2.right, 10f, 0.2f);
+    }
+
+    public void ApplyKnockback(Vector2 direction, float speed, float duration)
+    {
         if (_isBeingKnockedBack || _IsDeath)
         {
             return;
         }
-        StartCoroutine(KnockbackCoroutine(direction, force, duration));
+        StartCoroutine(KnockbackCoroutine(direction, speed, duration));
     }
 
     // <<< NEW COROUTINE TO HANDLE KNOCKBACK STATE >>>
-    private IEnumerator KnockbackCoroutine(Vector2 direction, float force, float duration)
+    private IEnumerator KnockbackCoroutine(Vector2 direction, float speed, float duration)
     {
         _isBeingKnockedBack = true;
 
-        // Stop player's current momentum before applying new force
-        _R2D.linearVelocity = Vector2.zero;
+        if (_animator != null)
+        {
+            _animator.enabled = false;
+        }
 
-        // Apply the knockback force as a single impulse
-        _R2D.AddForce(direction * force, ForceMode2D.Impulse);
+        // We don't need to manage gravity if we're controlling velocity every frame.
 
-        // Wait for the duration of the knockback stun
-        yield return new WaitForSeconds(duration);
+        float timer = 0;
+        while (timer < duration)
+        {
+            // For the entire duration, force the player's velocity to be the knockback velocity.
+            // This OVERRIDES any other calculations from ApplyMovement.
+            _R2D.linearVelocity = direction * speed;
 
-        // After knockback duration, restore control to the player
+            timer += Time.deltaTime;
+            yield return null; // Wait for the next frame
+        }
+
+        // After the loop, the knockback is over.
         _isBeingKnockedBack = false;
+        // --- RE-ENABLE THE ANIMATOR ---
+        if (_animator != null)
+        {
+            _animator.enabled = true;
+        }
+        // --- END RE-ENABLE ---
+        // Reset velocity so player doesn't keep sliding
+        _R2D.linearVelocity = new Vector2(0, _R2D.linearVelocity.y);
+
+        // Optional: You can reset velocity to zero here for an abrupt stop,
+        // or let it be so the player might slide a little, which can feel good.
+        // _R2D.velocity = Vector2.zero;
     }
     public void Die()
     {
