@@ -203,7 +203,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4605418138331732616, guid: da579a6310530ba4d91c04baa8bf5dba, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 69.74374
+      value: 69.52
       objectReference: {fileID: 0}
     - target: {fileID: 4605418138331732616, guid: da579a6310530ba4d91c04baa8bf5dba, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1202,6 +1202,10 @@ PrefabInstance:
       value: 0.18836774
       objectReference: {fileID: 0}
     - target: {fileID: 1874623888118948633, guid: da579a6310530ba4d91c04baa8bf5dba, type: 3}
+      propertyPath: patrolSpeed
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1874623888118948633, guid: da579a6310530ba4d91c04baa8bf5dba, type: 3}
       propertyPath: AttackTarget
       value: 
       objectReference: {fileID: 1910625472}
@@ -1215,7 +1219,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4605418138331732616, guid: da579a6310530ba4d91c04baa8bf5dba, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 69.6321
+      value: 69.514
       objectReference: {fileID: 0}
     - target: {fileID: 4605418138331732616, guid: da579a6310530ba4d91c04baa8bf5dba, type: 3}
       propertyPath: m_LocalPosition.z
@@ -17874,6 +17878,10 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1874623888118948633, guid: da579a6310530ba4d91c04baa8bf5dba, type: 3}
       propertyPath: AttackTarget
+      value: 
+      objectReference: {fileID: 1910625472}
+    - target: {fileID: 1874623888118948633, guid: da579a6310530ba4d91c04baa8bf5dba, type: 3}
+      propertyPath: attackHitPoint
       value: 
       objectReference: {fileID: 1910625472}
     - target: {fileID: 3236095843762919097, guid: da579a6310530ba4d91c04baa8bf5dba, type: 3}
@@ -273860,20 +273868,16 @@ PrefabInstance:
     m_TransformParent: {fileID: 167149724}
     m_Modifications:
     - target: {fileID: 1874623888118948633, guid: da579a6310530ba4d91c04baa8bf5dba, type: 3}
-      propertyPath: AttackTarget
+      propertyPath: attackHitPoint
       value: 
       objectReference: {fileID: 1910625472}
     - target: {fileID: 3236095843762919097, guid: da579a6310530ba4d91c04baa8bf5dba, type: 3}
       propertyPath: m_Name
       value: Enemy
       objectReference: {fileID: 0}
-    - target: {fileID: 3264769247819381562, guid: da579a6310530ba4d91c04baa8bf5dba, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -1.15
-      objectReference: {fileID: 0}
     - target: {fileID: 4605418138331732616, guid: da579a6310530ba4d91c04baa8bf5dba, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 43.987408
+      value: 35.6
       objectReference: {fileID: 0}
     - target: {fileID: 4605418138331732616, guid: da579a6310530ba4d91c04baa8bf5dba, type: 3}
       propertyPath: m_LocalPosition.y

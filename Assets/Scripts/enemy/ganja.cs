@@ -15,11 +15,11 @@ public class ganja : MonoBehaviour
     public float detectionRange = 8f;
     public float loseSightRange = 12f;
 
-    // <<< NEW KNOCKBACK STATS >>>
-    [Tooltip("How hard the player is pushed back on hit.")]
-    public float attackKnockbackSpeed = 10f; // Renamed from attackKnockbackForce
-    [Tooltip("How long the player is stunned during knockback (in seconds).")]
-    public float knockbackDuration = 0.2f;
+    [Header("Knockback")] // You can add a header for organization
+    [Tooltip("The immediate force applied to the player on hit.")]
+    public float attackKnockbackForce = 15f; // Renamed from attackKnockbackSpeed. Try a higher value like 15 or 20 to start.
+    [Tooltip("How long the player is stunned/uncontrolled after being hit (in seconds).")]
+    public float knockbackStunDuration = 0.15f; // Renamed from knockbackDuration. A shorter stun often feels better.
 
     [Header("References")]
     public Transform playerTransform;
@@ -211,10 +211,10 @@ public class ganja : MonoBehaviour
                 {
                     horizontalDirection = (transform.localScale.x > 0) ? 1 : -1;
                 }
-                Vector2 knockbackDirection = new Vector2(horizontalDirection, 0f).normalized;
+                Vector2 knockbackDirection = new Vector2(horizontalDirection, 0.25f).normalized; // Added a slight upward pop
 
-                // --- USE THE NEW VARIABLE NAME ---
-                player.ApplyKnockback(knockbackDirection, attackKnockbackSpeed, knockbackDuration);
+                // --- USE THE NEW VARIABLES IN THE UPDATED CALL ---
+                player.ApplyKnockback(knockbackDirection, attackKnockbackForce, knockbackStunDuration);
             }
         }
     }

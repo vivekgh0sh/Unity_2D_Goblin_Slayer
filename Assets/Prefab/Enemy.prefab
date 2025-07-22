@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7648330278358030536}
   - component: {fileID: 3023082049945835240}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: AttackRange
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 623450712564775878}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.045, y: -0.13, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -92,7 +92,7 @@ GameObject:
   - component: {fileID: 8741305274078522510}
   - component: {fileID: 1012531822032120618}
   - component: {fileID: 6600758684447263340}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Enemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -108,7 +108,7 @@ Transform:
   m_GameObject: {fileID: 3236095843762919097}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 26.75, y: 1.17, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -128,16 +128,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f9f16a95312bca4cadc859ec295f623, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Distance: 2
-  Speed: 2
+  Distance: 10
+  Speed: 5
   AttackCooldown: 1
   Damage: 1
-  maxHealth: 10
-  Health: 3
+  maxHealth: 5
+  Health: 0
   healthBarPrefab: {fileID: 1429420136992199243, guid: 2ccb075bb98d9dd4b8002421795c0391, type: 3}
   healthBarOffset: {x: 0, y: 1, z: 0}
   Target: {fileID: 3264769247819381562}
-  AttackTarget: {fileID: 6609995282689691476, guid: 4f398122dd9bfeb4eb75dbbacfc795e7, type: 3}
+  AttackTarget: {fileID: 0}
 --- !u!212 &579290580693202213
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -230,7 +230,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 2
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -297,7 +297,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3264769247819381562}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Target
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -313,7 +313,7 @@ Transform:
   m_GameObject: {fileID: 9044779231309168619}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.75, y: -0.973, z: 0}
+  m_LocalPosition: {x: 1.29, y: -0.98, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
