@@ -110,8 +110,8 @@ MonoBehaviour:
   attackDamage: 1
   attackRange: 1.95
   attackCooldown: 1
-  detectionRange: 5
-  loseSightRange: 7
+  detectionRange: 10
+  loseSightRange: 12
   attackKnockbackForce: 15
   knockbackStunDuration: 0.5
   playerTransform: {fileID: 0}

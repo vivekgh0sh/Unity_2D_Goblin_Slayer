@@ -30,11 +30,14 @@ public class Enemy : MonoBehaviour
     private bool _isRight = true;
     private bool _isAttacking = false;
     private bool _isPatrolling = false; // <<< NEW: To control patrolling state
+    private bool _isDead = false; // NEW: To track if enemy is dead
 
     // --- Animator Hashes ---
     private static readonly int AttackTriggerHash = Animator.StringToHash("Attack"); // Assuming "Attack" is a Trigger
     private static readonly int IsAttackingBoolHash = Animator.StringToHash("IsAttacking"); // If you also have a bool for attack loop
     private static readonly int IsWalkingHash = Animator.StringToHash("IsWalking"); // For patrol/walk animation
+    private static readonly int TakeHitTriggerHash = Animator.StringToHash("TakeHit");
+    private static readonly int DieTriggerHash = Animator.StringToHash("Die");
 
     private void Awake()
     {
@@ -91,7 +94,7 @@ public class Enemy : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (_healthBarCanvasInstance != null && _mainCamera != null)
+        if (_healthBarCanvasInstance != null && _mainCamera != null && !_isDead)
         {
             _healthBarCanvasInstance.transform.LookAt(transform.position + _mainCamera.transform.rotation * Vector3.forward,
                                                       _mainCamera.transform.rotation * Vector3.up);
@@ -100,6 +103,9 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
+        // Don't do anything if enemy is dead
+        if (_isDead) return;
+
         if (_isPatrolling && !_isAttacking)
         {
             Patrol();
@@ -155,7 +161,7 @@ public class Enemy : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player"))
+        if (collision.CompareTag("Player") && !_isDead)
         {
             _player = collision.transform;
             _isAttacking = true;
@@ -170,7 +176,7 @@ public class Enemy : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player"))
+        if (collision.CompareTag("Player") && !_isDead)
         {
             FacePlayer(); // Keep facing player while in trigger
 
@@ -184,7 +190,7 @@ public class Enemy : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player"))
+        if (collision.CompareTag("Player") && !_isDead)
         {
             _player = null;
             _isAttacking = false;
@@ -199,7 +205,7 @@ public class Enemy : MonoBehaviour
 
     private void FacePlayer()
     {
-        if (_player == null) return;
+        if (_player == null || _isDead) return;
 
         // Determine direction to player
         bool playerIsToTheRight = _player.position.x > transform.position.x;
@@ -217,7 +223,7 @@ public class Enemy : MonoBehaviour
 
     public void DealDamage()
     {
-        if (_player != null && AttackTarget != null)
+        if (_player != null && AttackTarget != null && !_isDead)
         {
             float attackRange = 1.5f;
             if (Vector2.Distance(AttackTarget.position, _player.position) < attackRange)
@@ -233,11 +239,19 @@ public class Enemy : MonoBehaviour
 
     public void TakeDamage(int amount)
     {
+        if (_isDead) return; // Don't take damage if already dead
+
         Health -= amount;
         Health = Mathf.Max(Health, 0);
         Debug.Log($"{gameObject.name} took {amount} damage. Current Health: {Health}/{maxHealth}");
 
         UpdateHealthBarVisuals();
+
+        // Trigger TakeHit animation if still alive
+        if (Health > 0 && _animator != null)
+        {
+            _animator.SetTrigger(TakeHitTriggerHash);
+        }
 
         if (Health <= 0)
         {
@@ -273,16 +287,49 @@ public class Enemy : MonoBehaviour
 
     private void Die()
     {
+        if (_isDead) return; // Prevent multiple deaths
+
         Debug.Log($"{gameObject.name} has died.");
+        _isDead = true; // Mark as dead
         _isPatrolling = false; // Stop all activities
         _isAttacking = false;
 
-        if (_healthBarCanvasInstance != null)
+        if (_animator != null)
         {
-            Destroy(_healthBarCanvasInstance.gameObject);
+            _animator.SetTrigger(DieTriggerHash); // Trigger death animation
         }
-        // if (_animator != null) _animator.SetTrigger("DieTrigger");
-        Destroy(gameObject /*, optionalDelayForAnimation */);
+
+        // Freeze the enemy in place
+        Rigidbody2D rb = GetComponent<Rigidbody2D>();
+        if (rb != null)
+        {
+            rb.constraints = RigidbodyConstraints2D.FreezeAll;
+        }
+
+        // Disable collider so it doesn't interact anymore
+        Collider2D col = GetComponent<Collider2D>();
+        if (col != null)
+            col.enabled = false;
+
+        // Wait 5 seconds then destroy
+        Invoke("CleanupAfterDeath", 5f);
+    }
+
+    private void CleanupAfterDeath()
+    {
+        if (_healthBarCanvasInstance != null)
+            Destroy(_healthBarCanvasInstance.gameObject);
+
+        Destroy(gameObject);
+    }
+
+    // Optional: Called via Animation Event at the end of death animation
+    public void OnDeathAnimationEnd()
+    {
+        // If using animation events, you can call CleanupAfterDeath directly
+        // or handle specific cleanup here
+        CancelInvoke("CleanupAfterDeath"); // Cancel the invoke if animation event is used
+        CleanupAfterDeath();
     }
 
     private void OnDestroy()
@@ -290,6 +337,7 @@ public class Enemy : MonoBehaviour
         if (_healthBarCanvasInstance != null)
         {
             Destroy(_healthBarCanvasInstance.gameObject);
+            _healthBarCanvasInstance = null; // Prevent errors
         }
     }
 }
