@@ -13,6 +13,34 @@ public class SkeletonKnight : MonoBehaviour
     public float loseSightRange = 15f; // How far until player is "lost"
     public float preferredStoppingDistance = 2f; // Distance to stop when near player but attacks might be on cooldown
 
+    [Header("Combat Phases")]
+    [Tooltip("Health percentage threshold for Phase 2")]
+    [Range(0, 100)]
+    public int phase2ThresholdPercent = 70;
+    [Tooltip("Health percentage threshold for Phase 3")]
+    [Range(0, 100)]
+    public int phase3ThresholdPercent = 30;
+    [Tooltip("Multiplier for attack speed in Phase 2")]
+    public float phase2AttackSpeedMultiplier = 1.2f;
+    [Tooltip("Multiplier for attack speed in Phase 3")]
+    public float phase3AttackSpeedMultiplier = 1.5f;
+    [Tooltip("Multiplier for movement speed in Phase 3")]
+    public float phase3MoveSpeedMultiplier = 1.3f;
+
+    [Header("Advanced AI")]
+    [Tooltip("Chance (0-1) to perform a combo when an attack finishes successfully")]
+    public float comboChance = 0.4f;
+    [Tooltip("Time window (seconds) after player attack where boss can attempt to block reactively")]
+    public float reactiveBlockWindow = 0.8f;
+    [Tooltip("Cooldown for reactive blocking")]
+    public float reactiveBlockCooldown = 3f;
+    [Tooltip("Distance within which boss might strafe")]
+    public float strafeDistanceThreshold = 3f;
+    [Tooltip("Chance (0-1) to strafe each decision tick")]
+    public float strafeChance = 0.3f;
+    [Tooltip("Force to apply when backing away")]
+    public float backAwayForce = 3f;
+
     [Header("References")]
     public Transform playerTransform;   // Assign the Player's transform
     public LayerMask playerLayer;       // Set this to the layer your Player is on
@@ -23,8 +51,8 @@ public class SkeletonKnight : MonoBehaviour
     public int attack1Damage = 10;
     public float attack1Range = 2.0f;
     public float attack1Cooldown = 2.5f;
-    public float attack1HitFrameDelay = 0.5f; // Time from animation start to damage frame
-    public float attack1RecoveryTime = 0.7f; // Time for animation to finish after hit frame
+    public float attack1HitFrameDelay = 0.5f; // Time from animation start to damage frame (now mainly for Coroutine safety)
+    public float attack1RecoveryTime = 0.7f; // Time for animation to finish after hit frame (now mainly for Coroutine safety)
     public AudioClip attack1Sfx;
 
     [Header("Attack 2 (Heavy Swing)")]
@@ -45,7 +73,7 @@ public class SkeletonKnight : MonoBehaviour
     // public float attack3KnockbackForce = 10f; // Optional for shield push
 
     [Header("Shield Block")]
-    public float shieldBlockChance = 0.3f; // Chance to block when eligible
+    public float shieldBlockChance = 0.3f; // Chance to block when eligible (proactive)
     public float shieldBlockDuration = 2.0f;
     public float shieldBlockCooldown = 6.0f;
     [Tooltip("How much damage is reduced when blocking (0 = no damage, 1 = full damage)")]
@@ -57,6 +85,12 @@ public class SkeletonKnight : MonoBehaviour
     public AudioClip takeHitSfx;
     public AudioClip deathSfx;
     public AudioClip[] walkSfx; // Optional for walking sound
+
+    [Header("Feedback & Polish")]
+    [Tooltip("Duration of hit stun when taking damage (not blocking)")]
+    public float hitStunDuration = 0.5f; // Configurable hit stun
+    [Tooltip("Time to wait before destroying the object after death animation starts")]
+    public float deathCleanupDelay = 3f; // Configurable death delay
 
     // Components
     private Animator _animator;
@@ -70,11 +104,14 @@ public class SkeletonKnight : MonoBehaviour
     private bool _isBlocking = false;
     private bool _isTakingHit = false;
     private bool _isDead = false;
-
     private float _lastAttack1Time = -Mathf.Infinity;
     private float _lastAttack2Time = -Mathf.Infinity;
     private float _lastAttack3Time = -Mathf.Infinity;
     private float _lastBlockTime = -Mathf.Infinity;
+    private float _lastReactiveBlockAttemptTime = -Mathf.Infinity;
+    private float _lastPlayerAttackTime = -Mathf.Infinity; // Track when player last attacked
+    private int _currentPhase = 1;
+    private int _lastAttackUsed = 0; // 0 = none, 1, 2, 3 = attack type
 
     // Animator Hashes
     private static readonly int IsWalkingHash = Animator.StringToHash("IsWalking");
@@ -84,6 +121,7 @@ public class SkeletonKnight : MonoBehaviour
     private static readonly int ShieldBlockTriggerHash = Animator.StringToHash("ShieldBlock"); // Or "IsBlocking" (bool)
     private static readonly int TakeHitTriggerHash = Animator.StringToHash("TakeHit");
     private static readonly int DeathTriggerHash = Animator.StringToHash("Death");
+    // private static readonly int TauntTriggerHash = Animator.StringToHash("Taunt"); // REMOVED
 
     void Awake()
     {
@@ -91,7 +129,6 @@ public class SkeletonKnight : MonoBehaviour
         _rb = GetComponent<Rigidbody2D>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _audioSource = GetComponent<AudioSource>();
-
         if (_audioSource == null)
         {
             _audioSource = gameObject.AddComponent<AudioSource>();
@@ -121,6 +158,7 @@ public class SkeletonKnight : MonoBehaviour
         _lastAttack2Time = -attack2Cooldown;
         _lastAttack3Time = -attack3Cooldown;
         _lastBlockTime = -shieldBlockCooldown;
+        _lastReactiveBlockAttemptTime = -reactiveBlockCooldown;
     }
 
     void Update()
@@ -132,13 +170,14 @@ public class SkeletonKnight : MonoBehaviour
             return;
         }
 
+        UpdatePhase(); // Check and update combat phase
+
         float distanceToPlayer = Vector2.Distance(transform.position, playerTransform.position);
         HandlePlayerDetection(distanceToPlayer);
 
         if (_isPlayerDetected)
         {
             FacePlayer();
-
             if (_isAttacking || _isBlocking) // If currently performing an action, let it finish
             {
                 _animator.SetBool(IsWalkingHash, false);
@@ -154,6 +193,23 @@ public class SkeletonKnight : MonoBehaviour
             _animator.SetBool(IsWalkingHash, false);
             // Optional: Implement patrol behavior here
             if (_rb != null) _rb.linearVelocity = new Vector2(0, _rb.linearVelocity.y); // Stop
+        }
+    }
+
+    void UpdatePhase()
+    {
+        float healthPercent = (float)currentHealth / maxHealth * 100;
+        if (healthPercent <= phase3ThresholdPercent)
+        {
+            _currentPhase = 3;
+        }
+        else if (healthPercent <= phase2ThresholdPercent)
+        {
+            _currentPhase = 2;
+        }
+        else
+        {
+            _currentPhase = 1;
         }
     }
 
@@ -190,115 +246,288 @@ public class SkeletonKnight : MonoBehaviour
 
     void DecideNextAction(float distanceToPlayer)
     {
-        // Priority: Block > Attack > Move
-
-        // 1. Try to Block
-        if (Time.time >= _lastBlockTime + shieldBlockCooldown && Random.value < shieldBlockChance && distanceToPlayer <= detectionRange) // Can block if player is generally close
+        // Priority: Reactive Block > Proactive Block > Attack Combo > Attack > Move/Strafe
+        // 1. Try Reactive Block (if player recently attacked)
+        if (Time.time < _lastPlayerAttackTime + reactiveBlockWindow &&
+            Time.time >= _lastReactiveBlockAttemptTime + reactiveBlockCooldown &&
+            distanceToPlayer <= attack1Range + 1f) // Only block if player is reasonably close
         {
-            StartCoroutine(ShieldBlockCoroutine());
+            StartCoroutine(ShieldBlockCoroutine(isReactive: true));
             return;
         }
 
-        // 2. Try to Attack
+        // 2. Try Proactive Block
+        if (Time.time >= _lastBlockTime + shieldBlockCooldown && Random.value < shieldBlockChance && distanceToPlayer <= attack1Range + 2f)
+        {
+            StartCoroutine(ShieldBlockCoroutine(isReactive: false));
+            return;
+        }
+
+        // 3. Try Attack Combo (if last attack was successful and not a combo already)
+        if (_lastAttackUsed != 0 && Random.value < comboChance)
+        {
+            // Simple combo logic: Attack1 -> Attack3, Attack2 -> Attack1, Attack3 -> Attack2
+            System.Action comboAttack = null;
+            if (_lastAttackUsed == 1 && Time.time >= _lastAttack1Time + GetAdjustedCooldown(attack1Cooldown))
+                comboAttack = () => StartCoroutine(PerformAttack3());
+            else if (_lastAttackUsed == 2 && Time.time >= _lastAttack2Time + GetAdjustedCooldown(attack2Cooldown))
+                comboAttack = () => StartCoroutine(PerformAttack1());
+            else if (_lastAttackUsed == 3 && Time.time >= _lastAttack3Time + GetAdjustedCooldown(attack3Cooldown))
+                comboAttack = () => StartCoroutine(PerformAttack2());
+
+            if (comboAttack != null)
+            {
+                comboAttack.Invoke();
+                _lastAttackUsed = 0; // Reset to prevent chain combos for now
+                return;
+            }
+        }
+
+        // 4. Try to Attack (with weighted selection)
         List<System.Action> availableAttacks = new List<System.Action>();
-        if (Time.time >= _lastAttack1Time + attack1Cooldown && distanceToPlayer <= attack1Range)
+        List<float> attackWeights = new List<float>();
+
+        float attack1Weight = 1.0f;
+        float attack2Weight = 1.0f;
+        float attack3Weight = 1.0f;
+
+        // Weight adjustments based on distance
+        if (distanceToPlayer > attack1Range * 0.8f) attack1Weight *= 0.5f; // Less likely if far for basic attack
+        if (distanceToPlayer < attack2Range * 0.6f) attack2Weight *= 1.5f; // More likely if close for heavy
+        if (distanceToPlayer > attack3Range * 0.9f) attack3Weight *= 0.3f; // Less likely if far for push
+
+        if (Time.time >= _lastAttack1Time + GetAdjustedCooldown(attack1Cooldown) && distanceToPlayer <= attack1Range)
+        {
             availableAttacks.Add(() => StartCoroutine(PerformAttack1()));
-        if (Time.time >= _lastAttack2Time + attack2Cooldown && distanceToPlayer <= attack2Range)
+            attackWeights.Add(attack1Weight);
+        }
+        if (Time.time >= _lastAttack2Time + GetAdjustedCooldown(attack2Cooldown) && distanceToPlayer <= attack2Range)
+        {
             availableAttacks.Add(() => StartCoroutine(PerformAttack2()));
-        if (Time.time >= _lastAttack3Time + attack3Cooldown && distanceToPlayer <= attack3Range)
+            attackWeights.Add(attack2Weight);
+        }
+        if (Time.time >= _lastAttack3Time + GetAdjustedCooldown(attack3Cooldown) && distanceToPlayer <= attack3Range)
+        {
             availableAttacks.Add(() => StartCoroutine(PerformAttack3()));
+            attackWeights.Add(attack3Weight);
+        }
 
         if (availableAttacks.Count > 0)
         {
-            int choice = Random.Range(0, availableAttacks.Count);
-            availableAttacks[choice].Invoke(); // Execute a random available attack
-            return;
+            int choice = WeightedRandom(attackWeights);
+            if (choice >= 0 && choice < availableAttacks.Count)
+            {
+                availableAttacks[choice].Invoke();
+                return;
+            }
         }
 
-        // 3. Move or Stay Still
+        // 5. Move or Stay Still / Strafe / Back Away
         if (distanceToPlayer > preferredStoppingDistance)
         {
             MoveTowardsPlayer();
             _animator.SetBool(IsWalkingHash, true);
         }
-        else // Close enough, but attacks might be on cooldown
+        else // Close enough
         {
-            _animator.SetBool(IsWalkingHash, false);
-            _rb.linearVelocity = new Vector2(0, _rb.linearVelocity.y); // Stop
+            // Potentially strafe or back away
+            float rand = Random.value;
+            if (rand < strafeChance * 0.5f && distanceToPlayer < strafeDistanceThreshold)
+            {
+                Strafe();
+            }
+            else if (rand < strafeChance && distanceToPlayer < strafeDistanceThreshold)
+            {
+                BackAway();
+            }
+            else
+            {
+                _animator.SetBool(IsWalkingHash, false);
+                _rb.linearVelocity = new Vector2(0, _rb.linearVelocity.y); // Stop
+            }
         }
+    }
+
+    float GetAdjustedCooldown(float baseCooldown)
+    {
+        if (_currentPhase == 2) return baseCooldown / phase2AttackSpeedMultiplier;
+        if (_currentPhase == 3) return baseCooldown / phase3AttackSpeedMultiplier;
+        return baseCooldown;
+    }
+
+    float GetAdjustedMoveSpeed()
+    {
+        if (_currentPhase == 3) return moveSpeed * phase3MoveSpeedMultiplier;
+        return moveSpeed;
+    }
+
+    int WeightedRandom(List<float> weights)
+    {
+        if (weights == null || weights.Count == 0) return -1;
+
+        float totalWeight = 0;
+        foreach (float w in weights) totalWeight += w;
+
+        if (totalWeight <= 0) return Random.Range(0, weights.Count);
+
+        float randomValue = Random.Range(0, totalWeight);
+        float cumulativeWeight = 0;
+
+        for (int i = 0; i < weights.Count; i++)
+        {
+            cumulativeWeight += weights[i];
+            if (randomValue <= cumulativeWeight)
+            {
+                return i;
+            }
+        }
+        return weights.Count - 1; // Fallback
     }
 
     void MoveTowardsPlayer()
     {
         Vector2 direction = (playerTransform.position - transform.position).normalized;
-        _rb.linearVelocity = new Vector2(direction.x * moveSpeed, _rb.linearVelocity.y);
+        _rb.linearVelocity = new Vector2(direction.x * GetAdjustedMoveSpeed(), _rb.linearVelocity.y);
     }
 
+    void Strafe()
+    {
+        Vector2 direction = new Vector2(Random.Range(-1f, 1f), 0).normalized;
+        if (direction.x != 0) // Ensure we have a direction
+        {
+            // Ensure strafe direction is somewhat perpendicular to player direction
+            Vector2 toPlayer = (playerTransform.position - transform.position).normalized;
+            if (Vector2.Dot(direction, toPlayer) > 0.7f) // Too parallel, flip
+            {
+                direction = -direction;
+            }
+            _rb.AddForce(direction * GetAdjustedMoveSpeed() * 1.5f, ForceMode2D.Impulse);
+            _animator.SetBool(IsWalkingHash, true);
+        }
+    }
+
+    void BackAway()
+    {
+        Vector2 direction = (transform.position - playerTransform.position).normalized;
+        _rb.AddForce(direction * backAwayForce, ForceMode2D.Impulse);
+        _animator.SetBool(IsWalkingHash, true);
+    }
+
+
+    // --- Attack Coroutines (Timing mainly handled by Animation Events now) ---
     IEnumerator PerformAttack1()
     {
         _isAttacking = true;
         _lastAttack1Time = Time.time;
+        _lastAttackUsed = 1;
         _animator.SetTrigger(Attack1TriggerHash);
         PlaySound(attack1Sfx);
         _rb.linearVelocity = Vector2.zero; // Halt movement during attack
 
-        yield return new WaitForSeconds(attack1HitFrameDelay);
-        if (_isAttacking && !_isDead && !_isTakingHit) DealDamageToPlayer(attack1Damage); // Check flags before dealing damage
-
-        yield return new WaitForSeconds(attack1RecoveryTime);
-        _isAttacking = false;
+        // Safety net timeout - animation events should stop the coroutine
+        float maxDuration = attack1HitFrameDelay + attack1RecoveryTime + 1f;
+        float elapsedTime = 0f;
+        while (_isAttacking && !_isDead && !_isTakingHit && elapsedTime < maxDuration)
+        {
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        _isAttacking = false; // Ensure it's reset if animation event fails
     }
 
     IEnumerator PerformAttack2()
     {
         _isAttacking = true;
         _lastAttack2Time = Time.time;
+        _lastAttackUsed = 2;
         _animator.SetTrigger(Attack2TriggerHash);
         PlaySound(attack2Sfx);
         _rb.linearVelocity = Vector2.zero;
 
-        yield return new WaitForSeconds(attack2HitFrameDelay);
-        if (_isAttacking && !_isDead && !_isTakingHit) DealDamageToPlayer(attack2Damage);
-
-        yield return new WaitForSeconds(attack2RecoveryTime);
+        float maxDuration = attack2HitFrameDelay + attack2RecoveryTime + 1f;
+        float elapsedTime = 0f;
+        while (_isAttacking && !_isDead && !_isTakingHit && elapsedTime < maxDuration)
+        {
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
         _isAttacking = false;
     }
 
-    IEnumerator PerformAttack3() // Shield Push
+    IEnumerator PerformAttack3()
     {
         _isAttacking = true;
         _lastAttack3Time = Time.time;
+        _lastAttackUsed = 3;
         _animator.SetTrigger(Attack3TriggerHash);
         PlaySound(attack3Sfx);
         _rb.linearVelocity = Vector2.zero;
 
-        yield return new WaitForSeconds(attack3HitFrameDelay);
-        if (_isAttacking && !_isDead && !_isTakingHit)
+        float maxDuration = attack3HitFrameDelay + attack3RecoveryTime + 1f;
+        float elapsedTime = 0f;
+        while (_isAttacking && !_isDead && !_isTakingHit && elapsedTime < maxDuration)
         {
-            DealDamageToPlayer(attack3Damage);
-            // Optional: Add knockback to player here if DealDamageToPlayer doesn't handle it
-            // Player player = playerTransform.GetComponent<Player>();
-            // if (player != null) player.ApplyKnockback(...);
+            elapsedTime += Time.deltaTime;
+            yield return null;
         }
-
-        yield return new WaitForSeconds(attack3RecoveryTime);
         _isAttacking = false;
     }
 
-    IEnumerator ShieldBlockCoroutine()
+    // --- Animation Events for Attacks ---
+    // These methods MUST be called by Animation Events in your attack animations
+    public void OnAttack1HitFrame()
+    {
+        if (_isAttacking && !_isDead && !_isTakingHit) DealDamageToPlayer(attack1Damage);
+    }
+    public void OnAttack1Finished()
+    {
+        _isAttacking = false; // This is the primary way to end the attack state
+    }
+    public void OnAttack2HitFrame()
+    {
+        if (_isAttacking && !_isDead && !_isTakingHit) DealDamageToPlayer(attack2Damage);
+    }
+    public void OnAttack2Finished()
+    {
+        _isAttacking = false;
+    }
+    public void OnAttack3HitFrame()
+    {
+        if (_isAttacking && !_isDead && !_isTakingHit) DealDamageToPlayer(attack3Damage);
+    }
+    public void OnAttack3Finished()
+    {
+        _isAttacking = false;
+    }
+
+    IEnumerator ShieldBlockCoroutine(bool isReactive = false)
     {
         _isBlocking = true;
-        _lastBlockTime = Time.time;
-        _animator.SetTrigger(ShieldBlockTriggerHash); // Or _animator.SetBool("IsBlocking", true);
+        if (isReactive)
+        {
+            _lastReactiveBlockAttemptTime = Time.time;
+            // Debug.Log($"{gameObject.name} performed reactive block!");
+        }
+        else
+        {
+            _lastBlockTime = Time.time;
+            // Debug.Log($"{gameObject.name} performed proactive block!");
+        }
+        _animator.SetTrigger(ShieldBlockTriggerHash);
         PlaySound(shieldBlockActivateSfx);
         _rb.linearVelocity = Vector2.zero;
 
         yield return new WaitForSeconds(shieldBlockDuration);
 
-        // _animator.SetBool("IsBlocking", false); // If using a bool parameter
         _isBlocking = false;
     }
 
+    // --- Animation Event for Block End ---
+    // This method MUST be called by Animation Event at the end of the block animation
+    public void OnBlockFinished()
+    {
+        _isBlocking = false;
+    }
 
     void DealDamageToPlayer(int damage)
     {
@@ -307,7 +536,6 @@ public class SkeletonKnight : MonoBehaviour
             Debug.LogError($"{gameObject.name}: AttackPoint is not set!");
             return;
         }
-
         Collider2D[] hitPlayers = Physics2D.OverlapCircleAll(attackPoint.position, attackHitboxSize, playerLayer);
         foreach (Collider2D playerCollider in hitPlayers)
         {
@@ -316,16 +544,26 @@ public class SkeletonKnight : MonoBehaviour
             {
                 Debug.Log($"{gameObject.name} hit Player for {damage} damage.");
                 player.TakePlayerDamage(damage);
-                // Add knockback or other effects here if desired, specific to the attack
+                // Record player attack time for reactive block (assuming player attacks trigger this)
+                // This is a simplification - ideally, the Player script would notify enemies
+                // Or you could check for a specific "PlayerAttack" tag/layer on player's attack collider
+                // For now, we'll assume any hit from the boss means the player is attacking back
+                // A better way: Have Player script call a method on enemies when they attack
+                _lastPlayerAttackTime = Time.time;
                 break; // Usually hit one player
             }
         }
     }
 
+    // Call this method from the Player script when the player attacks (e.g., on sword swing)
+    public void OnPlayerAttack()
+    {
+        _lastPlayerAttackTime = Time.time;
+    }
+
     public void TakeDamage(int damageAmount)
     {
         if (_isDead) return;
-
         if (_isBlocking)
         {
             int damageAfterBlock = Mathf.RoundToInt(damageAmount * blockDamageMultiplier);
@@ -341,8 +579,6 @@ public class SkeletonKnight : MonoBehaviour
             PlaySound(takeHitSfx);
             Debug.Log($"{gameObject.name} took {damageAmount} damage. Health: {currentHealth}/{maxHealth}");
         }
-
-
         if (currentHealth <= 0)
         {
             currentHealth = 0;
@@ -357,44 +593,54 @@ public class SkeletonKnight : MonoBehaviour
     IEnumerator TakeHitStunCoroutine()
     {
         _isTakingHit = true;
-
-        // Interrupt current actions
-        if (_isAttacking)
-        {
-            StopCoroutine("PerformAttack1"); // Stop specific coroutines by name
-            StopCoroutine("PerformAttack2");
-            StopCoroutine("PerformAttack3");
-            _isAttacking = false;
-        }
-        if (_isBlocking)
-        {
-            StopCoroutine("ShieldBlockCoroutine");
-            _isBlocking = false;
-            // _animator.SetBool("IsBlocking", false); // If using bool for block anim
-        }
-
+        // Interrupt current actions (less critical now with Animation Events, but good safety)
+        // StopCoroutines are tricky by name, but we rely on Animation Events primarily
+        _isAttacking = false;
+        _isBlocking = false;
+        _animator.ResetTrigger(Attack1TriggerHash); // Try to cancel queued attacks
+        _animator.ResetTrigger(Attack2TriggerHash);
+        _animator.ResetTrigger(Attack3TriggerHash);
         _animator.SetTrigger(TakeHitTriggerHash);
         _rb.linearVelocity = Vector2.zero; // Briefly stop
 
-        // Duration of hit stun (adjust to match your TakeHit animation length)
-        yield return new WaitForSeconds(0.5f); // TODO: Make this configurable or match animation
+        yield return new WaitForSeconds(hitStunDuration); // Use configurable duration
+        _isTakingHit = false;
+    }
 
+    // --- Animation Event for Hit Stun End ---
+    // This method MUST be called by Animation Event at the end of the take hit animation
+    public void OnTakeHitFinished()
+    {
         _isTakingHit = false;
     }
 
     void Die()
     {
+        if (_isDead) return; // Prevent multiple deaths
         _isDead = true;
         _animator.SetTrigger(DeathTriggerHash);
         PlaySound(deathSfx);
         _rb.linearVelocity = Vector2.zero;
-        if (_rb != null) _rb.isKinematic = true; // Stop physics interactions
-
+        if (_rb != null) _rb.freezeRotation = true; // Often better than isKinematic for 2D
+        if (_rb != null) _rb.constraints = RigidbodyConstraints2D.FreezeAll; // Freeze all movement
         Collider2D col = GetComponent<Collider2D>();
         if (col != null) col.enabled = false; // Disable collider
 
-        // Destroy GameObject after death animation (adjust delay)
-        Destroy(gameObject, 3f); // TODO: Make this configurable or match animation
+        // Use configurable delay
+        Invoke("CleanupAfterDeath", deathCleanupDelay);
+    }
+
+    void CleanupAfterDeath()
+    {
+        Destroy(gameObject);
+    }
+
+    // --- Animation Event for Death End ---
+    // This method CAN be called by Animation Event at the end of the death animation instead of Invoke
+    public void OnDeathAnimationFinished()
+    {
+        CancelInvoke("CleanupAfterDeath"); // Cancel the Invoke if animation event happens first
+        CleanupAfterDeath();
     }
 
     private void PlaySound(AudioClip clip, float volume = 1.0f)
@@ -417,7 +663,6 @@ public class SkeletonKnight : MonoBehaviour
     void OnDrawGizmosSelected()
     {
         if (playerTransform == null) return;
-
         // Detection & Sight
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, detectionRange);
@@ -425,8 +670,6 @@ public class SkeletonKnight : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, loseSightRange);
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(transform.position, preferredStoppingDistance);
-
-
         // Attack Ranges (you can make these more distinct if needed)
         Gizmos.color = new Color(1f, 0f, 0f, 0.3f); // Red for Attack 1
         Gizmos.DrawWireSphere(transform.position, attack1Range);
@@ -434,7 +677,6 @@ public class SkeletonKnight : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, attack2Range);
         Gizmos.color = new Color(1f, 0f, 1f, 0.3f); // Magenta for Attack 3
         Gizmos.DrawWireSphere(transform.position, attack3Range);
-
         // Attack Hitbox
         if (attackPoint != null)
         {
