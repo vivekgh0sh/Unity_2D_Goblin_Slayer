@@ -48,6 +48,7 @@ public class Player : MonoBehaviour
     private Animator _animator;
     private SpriteRenderer _renderer;
     private CapsuleCollider2D _collider;
+    public TMPro.TextMeshProUGUI endGameTextTMP;
 
     public bool _IsDeath { get; private set; }
     private Vector3 _initialStartPosition;
@@ -458,20 +459,24 @@ public class Player : MonoBehaviour
     public void Die()
     {
         if (_IsDeath) return;
-
         Debug.Log("Player Died!");
         _IsDeath = true;
+
+        if (endGameTextTMP != null)
+        {
+            endGameTextTMP.text = "YOU DIED";
+            endGameTextTMP.gameObject.SetActive(true);
+        }
+
         if (_animator != null) _animator.Play("Death");
         PlaySound(deathSfx);
-
         if (_R2D != null)
         {
             _R2D.linearVelocity = Vector2.zero;
             _R2D.isKinematic = true;
         }
         if (_collider != null) _collider.enabled = false;
-
-        StartCoroutine(RespawnPlayerCoroutine(2f));
+        StartCoroutine(RespawnPlayerCoroutine(2f)); // Adjust delay if needed
         UpdateHealthUI(); // <<< UPDATE UI ON DEATH
     }
 
@@ -480,19 +485,23 @@ public class Player : MonoBehaviour
     private IEnumerator RespawnPlayerCoroutine(float delay)
     {
         yield return new WaitForSeconds(delay);
-
         Debug.Log("Respawning player at: " + Checkpoint.LastCheckpointPosition);
         transform.position = Checkpoint.LastCheckpointPosition;
-
         Health = maxHealth;
         _IsDeath = false;
         _jumpCount = 0;
         _isSlamming = false;
         _wasGroundedLastFrame = true;
-
         if (_animator != null) _animator.Play("Idle");
         if (_R2D != null) _R2D.isKinematic = false;
         if (_collider != null) _collider.enabled = true;
+
+        // --- Hide the end game text on respawn ---
+        if (endGameTextTMP != null) // If using TextMeshPro
+        {
+            endGameTextTMP.gameObject.SetActive(false);
+        }
+
 
         UpdateHealthUI(); // <<< UPDATE UI ON RESPAWN
     }

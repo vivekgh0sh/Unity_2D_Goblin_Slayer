@@ -2,7 +2,6 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic; // Required for List
-
 public class SkeletonKnight : MonoBehaviour
 {
     [Header("Core Stats")]
@@ -12,7 +11,6 @@ public class SkeletonKnight : MonoBehaviour
     public float detectionRange = 10f;  // How far to detect player
     public float loseSightRange = 15f; // How far until player is "lost"
     public float preferredStoppingDistance = 2f; // Distance to stop when near player but attacks might be on cooldown
-
     [Header("Combat Phases")]
     [Tooltip("Health percentage threshold for Phase 2")]
     [Range(0, 100)]
@@ -26,7 +24,6 @@ public class SkeletonKnight : MonoBehaviour
     public float phase3AttackSpeedMultiplier = 1.5f;
     [Tooltip("Multiplier for movement speed in Phase 3")]
     public float phase3MoveSpeedMultiplier = 1.3f;
-
     [Header("Advanced AI")]
     [Tooltip("Chance (0-1) to perform a combo when an attack finishes successfully")]
     public float comboChance = 0.4f;
@@ -40,12 +37,18 @@ public class SkeletonKnight : MonoBehaviour
     public float strafeChance = 0.3f;
     [Tooltip("Force to apply when backing away")]
     public float backAwayForce = 3f;
-
     [Header("References")]
     public Transform playerTransform;   // Assign the Player's transform
     public LayerMask playerLayer;       // Set this to the layer your Player is on
     public Transform attackPoint;       // Empty child GameObject where attacks originate
     public float attackHitboxSize = 0.7f; // General radius/size of the attack hitbox (can be overridden per attack logic if complex)
+
+    // --- Added UI References ---
+    [Header("UI References")]
+    public UnityEngine.UI.Image bossHealthFillImage; // Reference to the HealthFill Image component
+    public GameObject bossHealthBarObject; // Reference to the main BossHealthBar GameObject
+    public TMPro.TextMeshProUGUI endGameTextTMP;
+    // --- End UI References ---
 
     [Header("Attack 1 (Basic Swing)")]
     public int attack1Damage = 10;
@@ -54,7 +57,6 @@ public class SkeletonKnight : MonoBehaviour
     public float attack1HitFrameDelay = 0.5f; // Time from animation start to damage frame (now mainly for Coroutine safety)
     public float attack1RecoveryTime = 0.7f; // Time for animation to finish after hit frame (now mainly for Coroutine safety)
     public AudioClip attack1Sfx;
-
     [Header("Attack 2 (Heavy Swing)")]
     public int attack2Damage = 20;
     public float attack2Range = 2.5f;
@@ -62,7 +64,6 @@ public class SkeletonKnight : MonoBehaviour
     public float attack2HitFrameDelay = 0.8f;
     public float attack2RecoveryTime = 1.0f;
     public AudioClip attack2Sfx;
-
     [Header("Attack 3 (Shield Push)")]
     public int attack3Damage = 5; // Might do less damage but have knockback
     public float attack3Range = 1.5f;
@@ -71,7 +72,6 @@ public class SkeletonKnight : MonoBehaviour
     public float attack3RecoveryTime = 0.6f;
     public AudioClip attack3Sfx;
     // public float attack3KnockbackForce = 10f; // Optional for shield push
-
     [Header("Shield Block")]
     public float shieldBlockChance = 0.3f; // Chance to block when eligible (proactive)
     public float shieldBlockDuration = 2.0f;
@@ -80,24 +80,20 @@ public class SkeletonKnight : MonoBehaviour
     public float blockDamageMultiplier = 0.1f; // Takes 10% damage when blocking
     public AudioClip shieldBlockActivateSfx;
     public AudioClip shieldBlockImpactSfx;
-
     [Header("General SFX")]
     public AudioClip takeHitSfx;
     public AudioClip deathSfx;
     public AudioClip[] walkSfx; // Optional for walking sound
-
     [Header("Feedback & Polish")]
     [Tooltip("Duration of hit stun when taking damage (not blocking)")]
     public float hitStunDuration = 0.5f; // Configurable hit stun
     [Tooltip("Time to wait before destroying the object after death animation starts")]
     public float deathCleanupDelay = 3f; // Configurable death delay
-
     // Components
     private Animator _animator;
     private Rigidbody2D _rb;
     private SpriteRenderer _spriteRenderer;
     private AudioSource _audioSource;
-
     // State
     private bool _isPlayerDetected = false;
     private bool _isAttacking = false;
@@ -112,7 +108,6 @@ public class SkeletonKnight : MonoBehaviour
     private float _lastPlayerAttackTime = -Mathf.Infinity; // Track when player last attacked
     private int _currentPhase = 1;
     private int _lastAttackUsed = 0; // 0 = none, 1, 2, 3 = attack type
-
     // Animator Hashes
     private static readonly int IsWalkingHash = Animator.StringToHash("IsWalking");
     private static readonly int Attack1TriggerHash = Animator.StringToHash("Attack1");
@@ -122,7 +117,6 @@ public class SkeletonKnight : MonoBehaviour
     private static readonly int TakeHitTriggerHash = Animator.StringToHash("TakeHit");
     private static readonly int DeathTriggerHash = Animator.StringToHash("Death");
     // private static readonly int TauntTriggerHash = Animator.StringToHash("Taunt"); // REMOVED
-
     void Awake()
     {
         _animator = GetComponent<Animator>();
@@ -136,7 +130,6 @@ public class SkeletonKnight : MonoBehaviour
         }
         currentHealth = maxHealth;
     }
-
     void Start()
     {
         if (playerTransform == null)
@@ -159,8 +152,14 @@ public class SkeletonKnight : MonoBehaviour
         _lastAttack3Time = -attack3Cooldown;
         _lastBlockTime = -shieldBlockCooldown;
         _lastReactiveBlockAttemptTime = -reactiveBlockCooldown;
-    }
 
+        // --- Hide the health bar initially ---
+        if (bossHealthBarObject != null)
+        {
+            bossHealthBarObject.SetActive(false);
+        }
+        // --- End Hide Health Bar ---
+    }
     void Update()
     {
         if (_isDead || _isTakingHit || playerTransform == null)
@@ -169,12 +168,9 @@ public class SkeletonKnight : MonoBehaviour
             if (_rb != null && !_isDead) _rb.linearVelocity = new Vector2(0, _rb.linearVelocity.y);
             return;
         }
-
         UpdatePhase(); // Check and update combat phase
-
         float distanceToPlayer = Vector2.Distance(transform.position, playerTransform.position);
         HandlePlayerDetection(distanceToPlayer);
-
         if (_isPlayerDetected)
         {
             FacePlayer();
@@ -184,7 +180,6 @@ public class SkeletonKnight : MonoBehaviour
                 _rb.linearVelocity = new Vector2(0, _rb.linearVelocity.y); // Stop movement during attack/block
                 return;
             }
-
             // AI Decision Making
             DecideNextAction(distanceToPlayer);
         }
@@ -195,7 +190,6 @@ public class SkeletonKnight : MonoBehaviour
             if (_rb != null) _rb.linearVelocity = new Vector2(0, _rb.linearVelocity.y); // Stop
         }
     }
-
     void UpdatePhase()
     {
         float healthPercent = (float)currentHealth / maxHealth * 100;
@@ -212,7 +206,6 @@ public class SkeletonKnight : MonoBehaviour
             _currentPhase = 1;
         }
     }
-
     void HandlePlayerDetection(float distanceToPlayer)
     {
         if (!_isPlayerDetected && distanceToPlayer <= detectionRange)
@@ -222,6 +215,14 @@ public class SkeletonKnight : MonoBehaviour
             {
                 _isPlayerDetected = true;
                 Debug.Log($"{gameObject.name} detected Player!");
+
+                // --- Show and initialize the health bar when detected ---
+                if (bossHealthBarObject != null)
+                {
+                    bossHealthBarObject.SetActive(true);
+                    UpdateHealthBar(); // Initialize the bar to full health
+                }
+                // --- End Show Health Bar ---
             }
         }
         else if (_isPlayerDetected && distanceToPlayer > loseSightRange)
@@ -229,9 +230,11 @@ public class SkeletonKnight : MonoBehaviour
             _isPlayerDetected = false;
             Debug.Log($"{gameObject.name} lost sight of Player.");
             _animator.SetBool(IsWalkingHash, false);
+            // Optional: Hide the health bar if the player is out of range for a while
+            // You could use Invoke to delay hiding it slightly
+            // if (bossHealthBarObject != null) bossHealthBarObject.SetActive(false);
         }
     }
-
     void FacePlayer()
     {
         if (playerTransform.position.x < transform.position.x) // Player is to the left
@@ -243,7 +246,6 @@ public class SkeletonKnight : MonoBehaviour
             transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
         }
     }
-
     void DecideNextAction(float distanceToPlayer)
     {
         // Priority: Reactive Block > Proactive Block > Attack Combo > Attack > Move/Strafe
@@ -255,14 +257,12 @@ public class SkeletonKnight : MonoBehaviour
             StartCoroutine(ShieldBlockCoroutine(isReactive: true));
             return;
         }
-
         // 2. Try Proactive Block
         if (Time.time >= _lastBlockTime + shieldBlockCooldown && Random.value < shieldBlockChance && distanceToPlayer <= attack1Range + 2f)
         {
             StartCoroutine(ShieldBlockCoroutine(isReactive: false));
             return;
         }
-
         // 3. Try Attack Combo (if last attack was successful and not a combo already)
         if (_lastAttackUsed != 0 && Random.value < comboChance)
         {
@@ -274,7 +274,6 @@ public class SkeletonKnight : MonoBehaviour
                 comboAttack = () => StartCoroutine(PerformAttack1());
             else if (_lastAttackUsed == 3 && Time.time >= _lastAttack3Time + GetAdjustedCooldown(attack3Cooldown))
                 comboAttack = () => StartCoroutine(PerformAttack2());
-
             if (comboAttack != null)
             {
                 comboAttack.Invoke();
@@ -282,20 +281,16 @@ public class SkeletonKnight : MonoBehaviour
                 return;
             }
         }
-
         // 4. Try to Attack (with weighted selection)
         List<System.Action> availableAttacks = new List<System.Action>();
         List<float> attackWeights = new List<float>();
-
         float attack1Weight = 1.0f;
         float attack2Weight = 1.0f;
         float attack3Weight = 1.0f;
-
         // Weight adjustments based on distance
         if (distanceToPlayer > attack1Range * 0.8f) attack1Weight *= 0.5f; // Less likely if far for basic attack
         if (distanceToPlayer < attack2Range * 0.6f) attack2Weight *= 1.5f; // More likely if close for heavy
         if (distanceToPlayer > attack3Range * 0.9f) attack3Weight *= 0.3f; // Less likely if far for push
-
         if (Time.time >= _lastAttack1Time + GetAdjustedCooldown(attack1Cooldown) && distanceToPlayer <= attack1Range)
         {
             availableAttacks.Add(() => StartCoroutine(PerformAttack1()));
@@ -311,7 +306,6 @@ public class SkeletonKnight : MonoBehaviour
             availableAttacks.Add(() => StartCoroutine(PerformAttack3()));
             attackWeights.Add(attack3Weight);
         }
-
         if (availableAttacks.Count > 0)
         {
             int choice = WeightedRandom(attackWeights);
@@ -321,7 +315,6 @@ public class SkeletonKnight : MonoBehaviour
                 return;
             }
         }
-
         // 5. Move or Stay Still / Strafe / Back Away
         if (distanceToPlayer > preferredStoppingDistance)
         {
@@ -347,32 +340,25 @@ public class SkeletonKnight : MonoBehaviour
             }
         }
     }
-
     float GetAdjustedCooldown(float baseCooldown)
     {
         if (_currentPhase == 2) return baseCooldown / phase2AttackSpeedMultiplier;
         if (_currentPhase == 3) return baseCooldown / phase3AttackSpeedMultiplier;
         return baseCooldown;
     }
-
     float GetAdjustedMoveSpeed()
     {
         if (_currentPhase == 3) return moveSpeed * phase3MoveSpeedMultiplier;
         return moveSpeed;
     }
-
     int WeightedRandom(List<float> weights)
     {
         if (weights == null || weights.Count == 0) return -1;
-
         float totalWeight = 0;
         foreach (float w in weights) totalWeight += w;
-
         if (totalWeight <= 0) return Random.Range(0, weights.Count);
-
         float randomValue = Random.Range(0, totalWeight);
         float cumulativeWeight = 0;
-
         for (int i = 0; i < weights.Count; i++)
         {
             cumulativeWeight += weights[i];
@@ -383,13 +369,11 @@ public class SkeletonKnight : MonoBehaviour
         }
         return weights.Count - 1; // Fallback
     }
-
     void MoveTowardsPlayer()
     {
         Vector2 direction = (playerTransform.position - transform.position).normalized;
         _rb.linearVelocity = new Vector2(direction.x * GetAdjustedMoveSpeed(), _rb.linearVelocity.y);
     }
-
     void Strafe()
     {
         Vector2 direction = new Vector2(Random.Range(-1f, 1f), 0).normalized;
@@ -405,15 +389,12 @@ public class SkeletonKnight : MonoBehaviour
             _animator.SetBool(IsWalkingHash, true);
         }
     }
-
     void BackAway()
     {
         Vector2 direction = (transform.position - playerTransform.position).normalized;
         _rb.AddForce(direction * backAwayForce, ForceMode2D.Impulse);
         _animator.SetBool(IsWalkingHash, true);
     }
-
-
     // --- Attack Coroutines (Timing mainly handled by Animation Events now) ---
     IEnumerator PerformAttack1()
     {
@@ -423,7 +404,6 @@ public class SkeletonKnight : MonoBehaviour
         _animator.SetTrigger(Attack1TriggerHash);
         PlaySound(attack1Sfx);
         _rb.linearVelocity = Vector2.zero; // Halt movement during attack
-
         // Safety net timeout - animation events should stop the coroutine
         float maxDuration = attack1HitFrameDelay + attack1RecoveryTime + 1f;
         float elapsedTime = 0f;
@@ -434,7 +414,6 @@ public class SkeletonKnight : MonoBehaviour
         }
         _isAttacking = false; // Ensure it's reset if animation event fails
     }
-
     IEnumerator PerformAttack2()
     {
         _isAttacking = true;
@@ -443,7 +422,6 @@ public class SkeletonKnight : MonoBehaviour
         _animator.SetTrigger(Attack2TriggerHash);
         PlaySound(attack2Sfx);
         _rb.linearVelocity = Vector2.zero;
-
         float maxDuration = attack2HitFrameDelay + attack2RecoveryTime + 1f;
         float elapsedTime = 0f;
         while (_isAttacking && !_isDead && !_isTakingHit && elapsedTime < maxDuration)
@@ -453,7 +431,6 @@ public class SkeletonKnight : MonoBehaviour
         }
         _isAttacking = false;
     }
-
     IEnumerator PerformAttack3()
     {
         _isAttacking = true;
@@ -462,7 +439,6 @@ public class SkeletonKnight : MonoBehaviour
         _animator.SetTrigger(Attack3TriggerHash);
         PlaySound(attack3Sfx);
         _rb.linearVelocity = Vector2.zero;
-
         float maxDuration = attack3HitFrameDelay + attack3RecoveryTime + 1f;
         float elapsedTime = 0f;
         while (_isAttacking && !_isDead && !_isTakingHit && elapsedTime < maxDuration)
@@ -472,7 +448,6 @@ public class SkeletonKnight : MonoBehaviour
         }
         _isAttacking = false;
     }
-
     // --- Animation Events for Attacks ---
     // These methods MUST be called by Animation Events in your attack animations
     public void OnAttack1HitFrame()
@@ -499,7 +474,6 @@ public class SkeletonKnight : MonoBehaviour
     {
         _isAttacking = false;
     }
-
     IEnumerator ShieldBlockCoroutine(bool isReactive = false)
     {
         _isBlocking = true;
@@ -516,19 +490,15 @@ public class SkeletonKnight : MonoBehaviour
         _animator.SetTrigger(ShieldBlockTriggerHash);
         PlaySound(shieldBlockActivateSfx);
         _rb.linearVelocity = Vector2.zero;
-
         yield return new WaitForSeconds(shieldBlockDuration);
-
         _isBlocking = false;
     }
-
     // --- Animation Event for Block End ---
     // This method MUST be called by Animation Event at the end of the block animation
     public void OnBlockFinished()
     {
         _isBlocking = false;
     }
-
     void DealDamageToPlayer(int damage)
     {
         if (attackPoint == null)
@@ -554,12 +524,60 @@ public class SkeletonKnight : MonoBehaviour
             }
         }
     }
-
     // Call this method from the Player script when the player attacks (e.g., on sword swing)
     public void OnPlayerAttack()
     {
         _lastPlayerAttackTime = Time.time;
     }
+
+    // --- Added UpdateHealthBar Method ---
+    /// <summary>
+    /// Updates the visual state of the boss health bar based on current health.
+    /// </summary>
+    void UpdateHealthBar()
+    {
+        if (bossHealthFillImage != null)
+        {
+            // Calculate the health percentage (0.0 to 1.0)
+            float healthPercent = (float)currentHealth / maxHealth;
+
+            // Update the fill amount of the health bar image (0 = empty, 1 = full)
+            bossHealthFillImage.fillAmount = healthPercent;
+
+            // --- Optional Elden Ring Style Enhancements ---
+
+            // 1. Change color based on health (e.g., red -> yellow -> green, or red -> darker red)
+            // Example: Simple interpolation towards black as health decreases
+            // Color fullColor = Color.red;
+            // Color emptyColor = new Color(0.3f, 0f, 0f); // Dark red
+            // bossHealthFillImage.color = Color.Lerp(emptyColor, fullColor, healthPercent);
+
+            // 2. Add flashing effect when hit (requires a coroutine)
+            // This would typically be triggered in TakeDamage instead, modifying a temporary color.
+            // StartCoroutine(FlashHealthBar(Color.white, 0.1f)); // Example call
+        }
+
+        // Ensure the health bar GameObject is active (good practice, though handled in detection)
+        if (bossHealthBarObject != null && !bossHealthBarObject.activeSelf)
+        {
+            bossHealthBarObject.SetActive(true);
+        }
+    }
+
+    // Optional: Coroutine for flashing the health bar on hit
+    // Uncomment and implement if you want a flash effect
+    /*
+    IEnumerator FlashHealthBar(Color flashColor, float duration)
+    {
+        if (bossHealthFillImage == null) yield break;
+
+        Color originalColor = bossHealthFillImage.color;
+        bossHealthFillImage.color = flashColor;
+        yield return new WaitForSeconds(duration);
+        bossHealthFillImage.color = originalColor;
+    }
+    */
+    // --- End UpdateHealthBar Method ---
 
     public void TakeDamage(int damageAmount)
     {
@@ -579,6 +597,11 @@ public class SkeletonKnight : MonoBehaviour
             PlaySound(takeHitSfx);
             Debug.Log($"{gameObject.name} took {damageAmount} damage. Health: {currentHealth}/{maxHealth}");
         }
+
+        // --- Update the health bar after health changes ---
+        UpdateHealthBar();
+        // --- End Update Health Bar ---
+
         if (currentHealth <= 0)
         {
             currentHealth = 0;
@@ -589,7 +612,6 @@ public class SkeletonKnight : MonoBehaviour
             StartCoroutine(TakeHitStunCoroutine());
         }
     }
-
     IEnumerator TakeHitStunCoroutine()
     {
         _isTakingHit = true;
@@ -602,22 +624,33 @@ public class SkeletonKnight : MonoBehaviour
         _animator.ResetTrigger(Attack3TriggerHash);
         _animator.SetTrigger(TakeHitTriggerHash);
         _rb.linearVelocity = Vector2.zero; // Briefly stop
-
         yield return new WaitForSeconds(hitStunDuration); // Use configurable duration
         _isTakingHit = false;
     }
-
     // --- Animation Event for Hit Stun End ---
     // This method MUST be called by Animation Event at the end of the take hit animation
     public void OnTakeHitFinished()
     {
         _isTakingHit = false;
     }
-
     void Die()
     {
         if (_isDead) return; // Prevent multiple deaths
         _isDead = true;
+
+        if (endGameTextTMP != null) // If using TextMeshPro
+        {
+            endGameTextTMP.text = "THE SKELETON KNIGHT HAS FALLEN";
+            endGameTextTMP.gameObject.SetActive(true);
+        }
+        // --- Hide the health bar on death ---
+        if (bossHealthBarObject != null)
+        {
+            bossHealthBarObject.SetActive(false);
+            // Or destroy it: Destroy(bossHealthBarObject);
+        }
+        // --- End Hide Health Bar ---
+
         _animator.SetTrigger(DeathTriggerHash);
         PlaySound(deathSfx);
         _rb.linearVelocity = Vector2.zero;
@@ -625,16 +658,13 @@ public class SkeletonKnight : MonoBehaviour
         if (_rb != null) _rb.constraints = RigidbodyConstraints2D.FreezeAll; // Freeze all movement
         Collider2D col = GetComponent<Collider2D>();
         if (col != null) col.enabled = false; // Disable collider
-
-        // Use configurable delay
+                                              // Use configurable delay
         Invoke("CleanupAfterDeath", deathCleanupDelay);
     }
-
     void CleanupAfterDeath()
     {
         Destroy(gameObject);
     }
-
     // --- Animation Event for Death End ---
     // This method CAN be called by Animation Event at the end of the death animation instead of Invoke
     public void OnDeathAnimationFinished()
@@ -642,7 +672,6 @@ public class SkeletonKnight : MonoBehaviour
         CancelInvoke("CleanupAfterDeath"); // Cancel the Invoke if animation event happens first
         CleanupAfterDeath();
     }
-
     private void PlaySound(AudioClip clip, float volume = 1.0f)
     {
         if (_audioSource != null && clip != null)
@@ -650,7 +679,6 @@ public class SkeletonKnight : MonoBehaviour
             _audioSource.PlayOneShot(clip, volume);
         }
     }
-
     public void PlayWalkSound() // Called by animation event on walk animation frames
     {
         if (walkSfx != null && walkSfx.Length > 0)
@@ -658,7 +686,6 @@ public class SkeletonKnight : MonoBehaviour
             PlaySound(walkSfx[Random.Range(0, walkSfx.Length)], 0.7f);
         }
     }
-
     // Gizmos for visualizing ranges in Editor
     void OnDrawGizmosSelected()
     {
