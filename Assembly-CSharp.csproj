@@ -66,6 +66,7 @@
     <Compile Include="Assets\Scripts\enemy\ganja.cs" />
     <Compile Include="Assets\Scripts\Player\Checkpoint.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerAttackHitbox.cs" />
+    <Compile Include="Assets\Scripts\enemy\boss2\BossController.cs" />
     <Compile Include="Assets\Scripts\Player\Effect.cs" />
     <Compile Include="Assets\Scripts\OptionsMenu.cs" />
     <Compile Include="Assets\Scripts\Mech\MovingPlatform2D.cs" />
