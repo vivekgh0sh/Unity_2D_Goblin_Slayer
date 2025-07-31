@@ -195991,6 +195991,10 @@ MonoBehaviour:
   attackRange: 3
   attackCooldown: 0
   attackSfx: {fileID: 0}
+  chargeSpeedMultiplier: 4
+  chargeDuration: 1.5
+  chargeCooldown: 8
+  chargeTriggerDistance: 10
   playerTransform: {fileID: 1910625472}
   playerLayer:
     serializedVersion: 2
@@ -196003,7 +196007,6 @@ MonoBehaviour:
   takeHitSfx: {fileID: 0}
   deathSfx: {fileID: 0}
   walkSfx: []
-  hitStunDuration: 0.4
   deathCleanupDelay: 0
 --- !u!1 &1156700349
 GameObject:
