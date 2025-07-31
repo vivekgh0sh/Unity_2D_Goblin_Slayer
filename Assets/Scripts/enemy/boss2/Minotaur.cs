@@ -4,7 +4,6 @@ using System.Collections;
 
 public class Minotaur : MonoBehaviour, IDamageable
 {
-    // (All variables remain the same)
     [Header("Core Stats")]
     public int maxHealth = 200;
     public int currentHealth;
@@ -12,43 +11,62 @@ public class Minotaur : MonoBehaviour, IDamageable
     public float detectionRange = 12f;
     public float loseSightRange = 17f;
     public float attackStoppingDistance = 2.5f;
+
     [Header("Attack (Heavy Swing)")]
     public int attackDamage = 25;
     public float attackRange = 3.0f;
     public float attackCooldown = 2.0f;
     public AudioClip attackSfx;
+
+    [Header("Charge Attack")]
+    [Tooltip("How much faster the Minotaur moves when charging.")]
+    public float chargeSpeedMultiplier = 2.5f;
+    [Tooltip("How long the charge lasts in seconds.")]
+    public float chargeDuration = 1.5f;
+    [Tooltip("How often the Minotaur can charge in seconds.")]
+    public float chargeCooldown = 8f;
+    [Tooltip("The distance at which the Minotaur will consider charging the player.")]
+    public float chargeTriggerDistance = 10f;
+
     [Header("References")]
     public Transform playerTransform;
     public LayerMask playerLayer;
     public Transform attackPoint;
     public float attackHitboxSize = 1.0f;
+
     [Header("UI References")]
     public UnityEngine.UI.Image bossHealthFillImage;
     public GameObject bossHealthBarObject;
     public TMPro.TextMeshProUGUI endGameTextTMP;
+
     [Header("General SFX")]
     public AudioClip takeHitSfx;
     public AudioClip deathSfx;
     public AudioClip[] walkSfx;
+
     [Header("Feedback & Polish")]
-    public float hitStunDuration = 0.4f; // This is now unused, but we can leave it for reference
     public float deathCleanupDelay = 4f;
 
-    // Components & State
+    // Components
     private Animator _animator;
     private Rigidbody2D _rb;
     private AudioSource _audioSource;
+
+    // State
     private bool _isPlayerDetected = false;
     private bool _isAttacking = false;
     private bool _isTakingHit = false;
     private bool _isDead = false;
+    private bool _isCharging = false;
     private float _lastAttackTime = -Mathf.Infinity;
+    private float _lastChargeTime = -Mathf.Infinity;
+
+    // Animator Hashes
     private static readonly int IsWalkingHash = Animator.StringToHash("IsWalking");
     private static readonly int AttackTriggerHash = Animator.StringToHash("Attack");
     private static readonly int TakeHitTriggerHash = Animator.StringToHash("TakeHit");
     private static readonly int DeathTriggerHash = Animator.StringToHash("Death");
 
-    // (Awake, Start, Update, and most other methods are fine)
     void Awake()
     {
         _animator = GetComponent<Animator>();
@@ -67,6 +85,7 @@ public class Minotaur : MonoBehaviour, IDamageable
             else { Debug.LogError($"Minotaur ({gameObject.name}): Player not found!"); enabled = false; return; }
         }
         _lastAttackTime = -attackCooldown;
+        _lastChargeTime = -chargeCooldown; // Initialize charge cooldown
         if (bossHealthBarObject != null) { bossHealthBarObject.SetActive(false); }
     }
 
@@ -85,11 +104,10 @@ public class Minotaur : MonoBehaviour, IDamageable
         if (_isPlayerDetected)
         {
             FacePlayer();
-            if (_isAttacking)
+            // If an action is in progress, let it finish.
+            if (_isAttacking || _isCharging)
             {
-                _animator.SetBool(IsWalkingHash, false);
-                _rb.linearVelocity = new Vector2(0, _rb.linearVelocity.y);
-                return;
+                return; // Let the respective coroutines handle the logic
             }
             DecideNextAction(distanceToPlayer);
         }
@@ -100,69 +118,79 @@ public class Minotaur : MonoBehaviour, IDamageable
         }
     }
 
-
-    public void TakeDamage(int damageAmount)
+    void DecideNextAction(float distanceToPlayer)
     {
-        if (_isDead || _isTakingHit) return;
-
-        currentHealth -= damageAmount;
-        PlaySound(takeHitSfx);
-        UpdateHealthBar();
-
-        if (currentHealth <= 0)
+        // Priority 1: Charge if player is far away and charge is ready
+        if (distanceToPlayer > chargeTriggerDistance && Time.time >= _lastChargeTime + chargeCooldown)
         {
-            currentHealth = 0;
-            Die();
+            StartCoroutine(ChargeCoroutine());
+            return;
         }
+
+        // Priority 2: Attack if in range and cooldown is ready
+        if (distanceToPlayer <= attackRange && Time.time >= _lastAttackTime + attackCooldown)
+        {
+            StartCoroutine(PerformAttackCoroutine());
+        }
+        // Priority 3: Wait if in attack range but on cooldown
+        else if (distanceToPlayer <= attackStoppingDistance)
+        {
+            _animator.SetBool(IsWalkingHash, false);
+            _rb.linearVelocity = new Vector2(0, _rb.linearVelocity.y);
+        }
+        // Priority 4: Walk towards player
         else
         {
-            StartCoroutine(TakeHitStunCoroutine());
+            MoveTowardsPlayer();
+            _animator.SetBool(IsWalkingHash, true);
         }
     }
 
-    // --- MODIFIED METHOD ---
+    IEnumerator ChargeCoroutine()
+    {
+        Debug.Log("Minotaur is charging!");
+        _isCharging = true;
+        _lastChargeTime = Time.time;
+
+        _animator.speed = chargeSpeedMultiplier;
+        _animator.SetBool(IsWalkingHash, true);
+
+        float chargeEndTime = Time.time + chargeDuration;
+
+        while (Time.time < chargeEndTime)
+        {
+            if (_isDead || _isTakingHit) break;
+
+            Vector2 direction = (playerTransform.position - transform.position).normalized;
+            _rb.linearVelocity = new Vector2(direction.x * moveSpeed * chargeSpeedMultiplier, _rb.linearVelocity.y);
+
+            yield return null;
+        }
+
+        _animator.speed = 1f;
+        _isCharging = false;
+    }
+
+    // --- Other methods remain the same ---
     IEnumerator TakeHitStunCoroutine()
     {
-        _isTakingHit = true;
-        _isAttacking = false; // Interrupt any current attack
-        _animator.SetTrigger(TakeHitTriggerHash);
-        _rb.linearVelocity = Vector2.zero;
-
-        // We now wait for the animation event to call OnTakeHitFinished().
-        // The below is a failsafe in case the event is forgotten.
-        yield return new WaitForSeconds(3f);
-        if (_isTakingHit)
-        {
-            Debug.LogWarning($"Minotaur TakeHit state timed out. Did you add the 'OnTakeHitFinished' Animation Event to the TakeHit clip?");
-            _isTakingHit = false;
-        }
+        _isTakingHit = true; _isAttacking = false; _animator.SetTrigger(TakeHitTriggerHash); _rb.linearVelocity = Vector2.zero;
+        yield return new WaitForSeconds(3f); if (_isTakingHit) { _isTakingHit = false; }
     }
-
-    // --- NEW METHOD ---
-    /// <summary>
-    /// Call this from an Animation Event at the end of the TakeHit animation.
-    /// </summary>
-    public void OnTakeHitFinished()
-    {
-        _isTakingHit = false;
-    }
-
-    // (Rest of the script is unchanged)
+    public void OnTakeHitFinished() { _isTakingHit = false; }
     IEnumerator PerformAttackCoroutine()
     {
         _isAttacking = true; _lastAttackTime = Time.time; _animator.SetTrigger(AttackTriggerHash); PlaySound(attackSfx); _rb.linearVelocity = Vector2.zero;
-        float safetyTimeout = 5f; float elapsedTime = 0f;
-        while (_isAttacking && !_isDead && !_isTakingHit && elapsedTime < safetyTimeout) { elapsedTime += Time.deltaTime; yield return null; }
-        if (_isAttacking) { Debug.LogWarning($"Minotaur attack timed out. Check 'OnAttackFinished' Animation Event."); _isAttacking = false; }
+        yield return new WaitUntil(() => !_isAttacking || _isTakingHit || _isDead);
+    }
+    public void TakeDamage(int damageAmount)
+    {
+        if (_isDead || _isTakingHit) return;
+        currentHealth -= damageAmount; PlaySound(takeHitSfx); UpdateHealthBar();
+        if (currentHealth <= 0) { currentHealth = 0; Die(); } else { StartCoroutine(TakeHitStunCoroutine()); }
     }
     public void OnAttackHitFrame() { if (_isAttacking && !_isDead && !_isTakingHit) { DealDamageToPlayer(attackDamage); } }
     public void OnAttackFinished() { _isAttacking = false; }
-    void DecideNextAction(float distanceToPlayer)
-    {
-        if (distanceToPlayer <= attackRange && Time.time >= _lastAttackTime + attackCooldown) { StartCoroutine(PerformAttackCoroutine()); }
-        else if (distanceToPlayer <= attackStoppingDistance) { _animator.SetBool(IsWalkingHash, false); _rb.linearVelocity = new Vector2(0, _rb.linearVelocity.y); }
-        else { MoveTowardsPlayer(); _animator.SetBool(IsWalkingHash, true); }
-    }
     void HandlePlayerDetection(float distanceToPlayer)
     {
         if (!_isPlayerDetected && distanceToPlayer <= detectionRange)
@@ -179,5 +207,5 @@ public class Minotaur : MonoBehaviour, IDamageable
     private void PlaySound(AudioClip clip, float volume = 1.0f) { if (_audioSource != null && clip != null) { _audioSource.PlayOneShot(clip, volume); } }
     public void PlayWalkSound() { if (walkSfx != null && walkSfx.Length > 0) { PlaySound(walkSfx[Random.Range(0, walkSfx.Length)], 0.8f); } }
     void UpdateHealthBar() { if (bossHealthFillImage != null) { bossHealthFillImage.fillAmount = (float)currentHealth / maxHealth; } }
-    void OnDrawGizmosSelected() { Gizmos.color = Color.yellow; Gizmos.DrawWireSphere(transform.position, detectionRange); Gizmos.color = Color.gray; Gizmos.DrawWireSphere(transform.position, loseSightRange); Gizmos.color = Color.blue; Gizmos.DrawWireSphere(transform.position, attackStoppingDistance); Gizmos.color = Color.red; Gizmos.DrawWireSphere(transform.position, attackRange); if (attackPoint != null) { Gizmos.color = Color.red; Gizmos.DrawWireSphere(attackPoint.position, attackHitboxSize); } }
+    void OnDrawGizmosSelected() { Gizmos.color = Color.yellow; Gizmos.DrawWireSphere(transform.position, detectionRange); Gizmos.color = Color.gray; Gizmos.DrawWireSphere(transform.position, loseSightRange); Gizmos.color = Color.blue; Gizmos.DrawWireSphere(transform.position, attackStoppingDistance); Gizmos.color = Color.red; Gizmos.DrawWireSphere(transform.position, attackRange); Gizmos.color = Color.cyan; Gizmos.DrawWireSphere(transform.position, chargeTriggerDistance); if (attackPoint != null) { Gizmos.color = Color.red; Gizmos.DrawWireSphere(attackPoint.position, attackHitboxSize); } }
 }
