@@ -195981,7 +195981,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d89c7548717e73049ae07e37c96c6ba5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 200
+  maxHealth: 10
   currentHealth: 0
   moveSpeed: 2.5
   detectionRange: 12
@@ -195989,7 +195989,7 @@ MonoBehaviour:
   attackStoppingDistance: 2.5
   attackDamage: 10
   attackRange: 3
-  attackCooldown: 3.5
+  attackCooldown: 0
   attackSfx: {fileID: 0}
   playerTransform: {fileID: 1910625472}
   playerLayer:
@@ -196004,7 +196004,7 @@ MonoBehaviour:
   deathSfx: {fileID: 0}
   walkSfx: []
   hitStunDuration: 0.4
-  deathCleanupDelay: 4
+  deathCleanupDelay: 0
 --- !u!1 &1156700349
 GameObject:
   m_ObjectHideFlags: 0
