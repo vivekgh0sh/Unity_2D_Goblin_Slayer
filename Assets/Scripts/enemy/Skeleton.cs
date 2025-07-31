@@ -2,7 +2,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic; // Required for List
-public class SkeletonKnight : MonoBehaviour
+public class SkeletonKnight : MonoBehaviour, IDamageable
 {
     [Header("Core Stats")]
     public int maxHealth = 150;

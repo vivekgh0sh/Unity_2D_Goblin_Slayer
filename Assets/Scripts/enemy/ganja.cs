@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ganja : MonoBehaviour
+public class ganja : MonoBehaviour, IDamageable
 {
     [Header("Stats")]
     public int maxHealth = 5;

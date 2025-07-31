@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI; // REQUIRED for UI elements
 
-public class Enemy : MonoBehaviour
+public class Enemy : MonoBehaviour, IDamageable
 {
     public float Distance;
     public int Speed;

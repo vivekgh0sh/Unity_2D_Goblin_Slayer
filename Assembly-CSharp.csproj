@@ -61,15 +61,16 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.47f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\enemy\skeleton\Skeleton.cs" />
     <Compile Include="Assets\Scripts\Mech\PlatformTrigger2D.cs" />
     <Compile Include="Assets\Scripts\enemy\ganja.cs" />
+    <Compile Include="Assets\Scripts\enemy\boss2\Minotaur.cs" />
     <Compile Include="Assets\Scripts\Player\Checkpoint.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerAttackHitbox.cs" />
-    <Compile Include="Assets\Scripts\enemy\boss2\BossController.cs" />
     <Compile Include="Assets\Scripts\Player\Effect.cs" />
     <Compile Include="Assets\Scripts\OptionsMenu.cs" />
     <Compile Include="Assets\Scripts\Mech\MovingPlatform2D.cs" />
+    <Compile Include="Assets\Scripts\enemy\Skeleton.cs" />
+    <Compile Include="Assets\Scripts\IDamageable.cs" />
     <Compile Include="Assets\Scripts\Player\Player.cs" />
     <Compile Include="Assets\Scripts\Player\arrow.cs" />
     <Compile Include="Assets\Scripts\Mech\FallDetector.cs" />

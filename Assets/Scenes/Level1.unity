@@ -839,6 +839,38 @@ Transform:
   - {fileID: 599655181}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &170412565
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 170412566}
+  m_Layer: 7
+  m_Name: lvl2_boss
+  m_TagString: Enemy
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &170412566
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 170412565}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 158.92282, y: 60.76, z: -0.01917275}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1132356801}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &184822645
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -195769,12 +195801,12 @@ GameObject:
   m_Component:
   - component: {fileID: 1132356801}
   - component: {fileID: 1132356800}
+  - component: {fileID: 1132356805}
   - component: {fileID: 1132356799}
-  - component: {fileID: 1132356802}
   - component: {fileID: 1132356804}
   - component: {fileID: 1132356803}
   m_Layer: 7
-  m_Name: lvl2_boss
+  m_Name: Minotaur
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -195848,7 +195880,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_Sprite: {fileID: -838260387, guid: 8e0079de33712dc4b8b666b49daca7aa, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
+  m_FlipX: 1
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 2.88, y: 1.6}
@@ -195865,30 +195897,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1132356798}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 157.01, y: 60.88, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 1
-  m_Children: []
-  m_Father: {fileID: 0}
+  m_Children:
+  - {fileID: 1678361241}
+  m_Father: {fileID: 170412566}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1132356802
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1132356798}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d89c7548717e73049ae07e37c96c6ba5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveSpeed: 2
-  attackRange: 5
-  attackCooldown: 3
-  maxHealth: 100
-  player: {fileID: 1511484360}
 --- !u!70 &1132356803
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -195941,7 +195957,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 3
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -195953,6 +195969,42 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &1132356805
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1132356798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d89c7548717e73049ae07e37c96c6ba5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 200
+  currentHealth: 0
+  moveSpeed: 2.5
+  detectionRange: 12
+  loseSightRange: 17
+  attackStoppingDistance: 2.5
+  attackDamage: 10
+  attackRange: 3
+  attackCooldown: 3.5
+  attackSfx: {fileID: 0}
+  playerTransform: {fileID: 1910625472}
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  attackPoint: {fileID: 1678361241}
+  attackHitboxSize: 1
+  bossHealthFillImage: {fileID: 586741968}
+  bossHealthBarObject: {fileID: 220226403}
+  endGameTextTMP: {fileID: 1281216364}
+  takeHitSfx: {fileID: 0}
+  deathSfx: {fileID: 0}
+  walkSfx: []
+  hitStunDuration: 0.4
+  deathCleanupDelay: 4
 --- !u!1 &1156700349
 GameObject:
   m_ObjectHideFlags: 0
@@ -196568,11 +196620,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9d2a3c65b33fe1640b11bd4bf39a3a62, type: 3}
---- !u!1 &1511484360 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6328088646389641226, guid: 4f398122dd9bfeb4eb75dbbacfc795e7, type: 3}
-  m_PrefabInstance: {fileID: 4195200827830147585}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1530062085
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -196826,6 +196873,37 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4605418138331732616, guid: da579a6310530ba4d91c04baa8bf5dba, type: 3}
   m_PrefabInstance: {fileID: 666631816}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1678361240
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1678361241}
+  m_Layer: 7
+  m_Name: AttackPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1678361241
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1678361240}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.73, y: -0.175, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1132356801}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1738131035 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4605418138331732616, guid: da579a6310530ba4d91c04baa8bf5dba, type: 3}
@@ -292662,4 +292740,4 @@ SceneRoots:
   - {fileID: 1907315724}
   - {fileID: 2115501266}
   - {fileID: 220226407}
-  - {fileID: 1132356801}
+  - {fileID: 170412566}

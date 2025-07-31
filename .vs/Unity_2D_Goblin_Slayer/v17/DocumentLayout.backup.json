@@ -3,12 +3,16 @@
   "WorkspaceRootPath": "D:\\vivekgh0sh\\Unity_2D_Goblin_Slayer\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{07507546-A899-BCAB-05F2-1038B679D430}|Assembly-CSharp.csproj|d:\\vivekgh0sh\\unity_2d_goblin_slayer\\assets\\scripts\\enemy\\boss2\\newmonobehaviourscript.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{07507546-A899-BCAB-05F2-1038B679D430}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\enemy\\boss2\\newmonobehaviourscript.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{07507546-A899-BCAB-05F2-1038B679D430}|Assembly-CSharp.csproj|d:\\vivekgh0sh\\unity_2d_goblin_slayer\\assets\\scripts\\enemy\\boss2\\minotaurboss.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{07507546-A899-BCAB-05F2-1038B679D430}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\enemy\\boss2\\minotaurboss.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{07507546-A899-BCAB-05F2-1038B679D430}|Assembly-CSharp.csproj|d:\\vivekgh0sh\\unity_2d_goblin_slayer\\assets\\scripts\\enemy\\skeleton\\skeleton.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{07507546-A899-BCAB-05F2-1038B679D430}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\enemy\\skeleton\\skeleton.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|d:\\vivekgh0sh\\unity_2d_goblin_slayer\\assets\\scripts\\enemy\\boss2\\bosscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\scripts\\enemy\\boss2\\bosscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{07507546-A899-BCAB-05F2-1038B679D430}|Assembly-CSharp.csproj|D:\\vivekgh0sh\\Unity_2D_Goblin_Slayer\\assets\\scripts\\enemy\\skeleton.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{07507546-A899-BCAB-05F2-1038B679D430}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\enemy\\skeleton.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{07507546-A899-BCAB-05F2-1038B679D430}|Assembly-CSharp.csproj|D:\\vivekgh0sh\\Unity_2D_Goblin_Slayer\\assets\\scripts\\player\\player.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -21,6 +25,10 @@
     {
       "AbsoluteMoniker": "D:0:0:{07507546-A899-BCAB-05F2-1038B679D430}|Assembly-CSharp.csproj|D:\\vivekgh0sh\\Unity_2D_Goblin_Slayer\\assets\\scripts\\enemy\\ganja.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{07507546-A899-BCAB-05F2-1038B679D430}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\enemy\\ganja.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\vivekgh0sh\\Unity_2D_Goblin_Slayer\\Assets\\Scripts\\enemy\\skeleton\\Skeleton.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Assets\\Scripts\\enemy\\skeleton\\Skeleton.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -35,32 +43,57 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "NewMonoBehaviourScript.cs",
-              "DocumentMoniker": "D:\\vivekgh0sh\\Unity_2D_Goblin_Slayer\\Assets\\Scripts\\enemy\\boss2\\NewMonoBehaviourScript.cs",
-              "RelativeDocumentMoniker": "Assets\\Scripts\\enemy\\boss2\\NewMonoBehaviourScript.cs",
-              "ToolTip": "D:\\vivekgh0sh\\Unity_2D_Goblin_Slayer\\Assets\\Scripts\\enemy\\boss2\\NewMonoBehaviourScript.cs",
-              "RelativeToolTip": "Assets\\Scripts\\enemy\\boss2\\NewMonoBehaviourScript.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAbAAAAAAAAAA==",
+              "Title": "MinotaurBoss.cs",
+              "DocumentMoniker": "D:\\vivekgh0sh\\Unity_2D_Goblin_Slayer\\Assets\\Scripts\\enemy\\boss2\\MinotaurBoss.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\enemy\\boss2\\MinotaurBoss.cs",
+              "ToolTip": "D:\\vivekgh0sh\\Unity_2D_Goblin_Slayer\\Assets\\Scripts\\enemy\\boss2\\MinotaurBoss.cs",
+              "RelativeToolTip": "Assets\\Scripts\\enemy\\boss2\\MinotaurBoss.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAKQBAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-29T07:56:20.175Z",
+              "WhenOpened": "2025-07-30T06:02:23.882Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Skeleton.cs",
+              "DocumentMoniker": "D:\\vivekgh0sh\\Unity_2D_Goblin_Slayer\\Assets\\Scripts\\enemy\\Skeleton.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\enemy\\Skeleton.cs",
+              "ToolTip": "D:\\vivekgh0sh\\Unity_2D_Goblin_Slayer\\Assets\\Scripts\\enemy\\Skeleton.cs",
+              "RelativeToolTip": "Assets\\Scripts\\enemy\\Skeleton.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-30T05:44:38.194Z"
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 1,
+              "Title": "BossController.cs",
+              "DocumentMoniker": "D:\\vivekgh0sh\\Unity_2D_Goblin_Slayer\\Assets\\Scripts\\enemy\\boss2\\BossController.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\enemy\\boss2\\BossController.cs",
+              "ToolTip": "D:\\vivekgh0sh\\Unity_2D_Goblin_Slayer\\Assets\\Scripts\\enemy\\boss2\\BossController.cs",
+              "RelativeToolTip": "Assets\\Scripts\\enemy\\boss2\\BossController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAADAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-29T08:08:35.241Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
               "Title": "Skeleton.cs",
               "DocumentMoniker": "D:\\vivekgh0sh\\Unity_2D_Goblin_Slayer\\Assets\\Scripts\\enemy\\skeleton\\Skeleton.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\enemy\\skeleton\\Skeleton.cs",
               "ToolTip": "D:\\vivekgh0sh\\Unity_2D_Goblin_Slayer\\Assets\\Scripts\\enemy\\skeleton\\Skeleton.cs",
               "RelativeToolTip": "Assets\\Scripts\\enemy\\skeleton\\Skeleton.cs",
-              "ViewState": "AgIAAI0CAAAAAAAAAADwv4QCAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAAKMCAAAAAAAAAAAkwLACAAAuAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-07-23T06:18:54.515Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "Player.cs",
               "DocumentMoniker": "D:\\vivekgh0sh\\Unity_2D_Goblin_Slayer\\Assets\\Scripts\\Player\\Player.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\Player\\Player.cs",
@@ -72,7 +105,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "ganja.cs",
               "DocumentMoniker": "D:\\vivekgh0sh\\Unity_2D_Goblin_Slayer\\Assets\\Scripts\\enemy\\ganja.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\enemy\\ganja.cs",
@@ -84,7 +117,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "Enemy.cs",
               "DocumentMoniker": "D:\\vivekgh0sh\\Unity_2D_Goblin_Slayer\\Assets\\Scripts\\enemy\\goblin\\Enemy.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\enemy\\goblin\\Enemy.cs",
